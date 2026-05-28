@@ -13,7 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 
 <style>
-/* ========== ESTILOS GLOBAIS (mantidos) ========== */
+/* ========== ESTILOS GLOBAIS ========== */
 :root{
   --bg:#eef3f9;
   --white:#fff;
@@ -113,7 +113,7 @@ button:hover{ transform:translateY(-2px); }
 .color-swatch{ width:28px; height:28px; border-radius:50%; cursor:pointer; border:2px solid #d9e4ef; }
 .resume-wrap{ padding:18px; background:#eef3f9; overflow-x: auto; transition: max-width 0.3s; }
 .resume-wrap.mobile-preview{ max-width: 375px; margin: 0 auto; }
-.resume{ background:white; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,.06); } /* min-height removido */
+.resume{ background:white; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,.06); }
 
 /* TEMPLATES */
 .template-1 .resume-top{ background:linear-gradient(135deg,var(--t1-bg-start),var(--t1-bg-end)); color:var(--t1-text); padding:42px; }
@@ -132,7 +132,7 @@ button:hover{ transform:translateY(-2px); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-.template-3 .offshore-layout{ display:grid; grid-template-columns:300px 1fr; } /* min-height removido */
+.template-3 .offshore-layout{ display:grid; grid-template-columns:300px 1fr; }
 .template-3 .offshore-sidebar{ background:linear-gradient(180deg,var(--t3-bg-start),var(--t3-bg-end)); color:var(--t3-text); padding:40px 28px; height:100%; }
 .template-3 .offshore-photo{ width:170px; height:170px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 24px; border:5px solid var(--t3-border); cursor:pointer; transition:0.2s; }
 .template-3 .offshore-photo:hover { opacity:0.8; }
@@ -142,7 +142,7 @@ button:hover{ transform:translateY(-2px); }
 .template-3 .side-info{ line-height:1.8; font-size:.92rem; }
 .template-3 .offshore-main{ padding:40px; }
 
-/* MODAIS (mantidos) */
+/* MODAIS */
 .sections-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center; }
 .sections-modal.show { display: flex; }
 .sections-modal-content { background:white; width:90%; max-width:550px; max-height:80vh; border-radius:32px; overflow:auto; padding:20px; }
@@ -173,53 +173,47 @@ button:hover{ transform:translateY(-2px); }
 .lista-item { background:#f8fafc; border-radius:16px; padding:14px 18px; margin-bottom:12px; border-left:4px solid var(--gold); }
 .btn-carregar { background:var(--gold); color:#1e293b; border:none; padding:6px 14px; border-radius:30px; margin-top:8px; font-size:0.75rem; cursor:pointer; }
 
-/* ========== IMPRESSÃO (PDF) – FLUXO CONTÍNUO E SEM PÁGINAS EM BRANCO ========== */
+/* ========== IMPRESSÃO (PDF) – FLUXO CONTÍNUO COM QUEBRAS NATURAIS ========== */
 @media print {
   @page {
     margin: 0;
     size: A4;
   }
-  /* Esconde tudo, exceto o currículo */
+  /* Esconde todos os elementos do body usando visibility */
   body, body * {
-    display: none !important;
+    visibility: hidden;
   }
+  /* Torna apenas o currículo visível */
   #resume, #resume * {
-    display: block !important;
+    visibility: visible;
   }
+  /* Remove o espaço ocupado pelos outros elementos e posiciona o currículo */
   #resume {
-    /* Mantém o fluxo normal – sem position: absolute */
-    position: relative;
-    margin: 0 !important;
-    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background: white;
     box-shadow: none;
     border-radius: 0;
-    min-height: 0 !important;
+    min-height: 0;
     height: auto;
     overflow: visible;
   }
-  /* Garante que os blocos do currículo se comportem como blocos */
-  .resume, .resume-top, .resume-body, .section, .section-box, 
-  .contact, .offshore-layout, .offshore-sidebar, .offshore-main {
-    display: block !important;
-  }
-  /* Mantém cores */
+  /* Mantém cores e quebras naturais */
   .resume-top, .offshore-sidebar, .section, .section-box,
   .template-2 .section, .template-1 .resume-top, .template-3 .offshore-sidebar {
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-  /* Remove altura mínima do template 3 */
-  .template-3 .offshore-layout {
-    min-height: 0 !important;
-    height: auto;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
   /* Contatos empilhados verticalmente */
   .contact {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 6px !important;
+    gap: 6px;
   }
   .contact span, .contact > span, .contact > div {
     display: block;
@@ -242,12 +236,13 @@ button:hover{ transform:translateY(-2px); }
     height: auto;
     margin: 0 auto 15px;
   }
+  /* Remove padding e margens extras */
   .resume-wrap {
     padding: 0 !important;
     background: white !important;
     margin: 0 !important;
   }
-  /* Permite quebras de página naturais dentro das seções */
+  /* QUEBRAS NATURAIS – permite que o conteúdo quebre em qualquer lugar */
   .section, .section-box {
     break-inside: auto;
     page-break-inside: auto;
@@ -303,7 +298,7 @@ button:hover{ transform:translateY(-2px); }
           <button type="button" data-target="experiencias" class="format-btn" data-format="italic"><i>I</i></button>
           <button type="button" data-target="experiencias" class="format-btn" data-format="list"><i class="fas fa-list-ul"></i></button>
         </div>
-        <textarea id="experiencias" placeholder="Digite sua experiência profissional. Use **negrito**, *itálico*. Para criar lista, use o botão de lista ou digite '-' no início da linha."></textarea>
+        <textarea id="experiencias" placeholder="Digite sua experiência profissional..."></textarea>
       </div>
       <div class="input-group"><label>Formação</label>
         <div class="textarea-toolbar">
@@ -379,7 +374,7 @@ button:hover{ transform:translateY(-2px); }
   </div>
 </div>
 
-<!-- Modal de espaçamento -->
+<!-- Modais (spacing, style, cadastros, sections) -->
 <div id="spacingModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:260px;">
   <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Ajustar espaçamento</strong><button id="closeSpacing" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
   <label>Margem externa: <span id="marginValue">0</span>px</label><input type="range" id="marginSlider" min="0" max="40" value="0" step="2">
@@ -387,7 +382,6 @@ button:hover{ transform:translateY(-2px); }
   <button id="resetSpacing" style="margin-top:12px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%; cursor:pointer;">Resetar</button>
 </div>
 
-<!-- Modal de estilos -->
 <div id="styleModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; box-shadow:0 4px 20px rgba(0,0,0,0.2); z-index:10001; width:300px;">
   <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Estilos do currículo</strong><button id="closeStyle" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
   <label>Família da fonte:</label>
@@ -724,6 +718,7 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
   dados.template = currentTemplate; 
   dados.foto_base64 = fotoBase64; 
   dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked;
+  dados.linkedin = inputs.linkedin.value;
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
@@ -834,6 +829,7 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.template) trocarTemplate(data.template);
       if(data.foto_base64) fotoBase64 = data.foto_base64;
       if(data.mostrar_linkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrar_linkedin;
+      if(data.linkedin) inputs.linkedin.value = data.linkedin;
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
