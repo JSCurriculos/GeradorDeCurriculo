@@ -11,10 +11,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-/* ========== ESTILOS (MANTIDOS) ========== */
+/* ========== ESTILOS GLOBAIS (mantidos) ========== */
 :root{
   --bg:#eef3f9;
   --white:#fff;
@@ -114,7 +113,7 @@ button:hover{ transform:translateY(-2px); }
 .color-swatch{ width:28px; height:28px; border-radius:50%; cursor:pointer; border:2px solid #d9e4ef; }
 .resume-wrap{ padding:18px; background:#eef3f9; overflow-x: auto; transition: max-width 0.3s; }
 .resume-wrap.mobile-preview{ max-width: 375px; margin: 0 auto; }
-.resume{ background:white; border-radius:18px; overflow:hidden; box-shadow:0 8px 25px rgba(0,0,0,.06); min-height:1000px; }
+.resume{ background:white; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,.06); } /* min-height removido */
 
 /* TEMPLATES */
 .template-1 .resume-top{ background:linear-gradient(135deg,var(--t1-bg-start),var(--t1-bg-end)); color:var(--t1-text); padding:42px; }
@@ -133,7 +132,7 @@ button:hover{ transform:translateY(-2px); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-.template-3 .offshore-layout{ display:grid; grid-template-columns:300px 1fr; min-height:1000px; }
+.template-3 .offshore-layout{ display:grid; grid-template-columns:300px 1fr; } /* min-height removido */
 .template-3 .offshore-sidebar{ background:linear-gradient(180deg,var(--t3-bg-start),var(--t3-bg-end)); color:var(--t3-text); padding:40px 28px; height:100%; }
 .template-3 .offshore-photo{ width:170px; height:170px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 24px; border:5px solid var(--t3-border); cursor:pointer; transition:0.2s; }
 .template-3 .offshore-photo:hover { opacity:0.8; }
@@ -143,7 +142,7 @@ button:hover{ transform:translateY(-2px); }
 .template-3 .side-info{ line-height:1.8; font-size:.92rem; }
 .template-3 .offshore-main{ padding:40px; }
 
-/* MODAIS */
+/* MODAIS (mantidos) */
 .sections-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center; }
 .sections-modal.show { display: flex; }
 .sections-modal-content { background:white; width:90%; max-width:550px; max-height:80vh; border-radius:32px; overflow:auto; padding:20px; }
@@ -174,53 +173,87 @@ button:hover{ transform:translateY(-2px); }
 .lista-item { background:#f8fafc; border-radius:16px; padding:14px 18px; margin-bottom:12px; border-left:4px solid var(--gold); }
 .btn-carregar { background:var(--gold); color:#1e293b; border:none; padding:6px 14px; border-radius:30px; margin-top:8px; font-size:0.75rem; cursor:pointer; }
 
-/* ========== CSS PARA IMPRESSÃO (PDF PERFEITO) ========== */
+/* ========== IMPRESSÃO (PDF) – FLUXO CONTÍNUO E SEM PÁGINAS EM BRANCO ========== */
 @media print {
   @page {
     margin: 0;
     size: A4;
   }
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: white;
-  }
-  body * {
-    visibility: hidden;
+  /* Esconde tudo, exceto o currículo */
+  body, body * {
+    display: none !important;
   }
   #resume, #resume * {
-    visibility: visible;
+    display: block !important;
   }
   #resume {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    /* Mantém o fluxo normal – sem position: absolute */
+    position: relative;
+    margin: 0 !important;
+    padding: 0 !important;
     background: white;
     box-shadow: none;
     border-radius: 0;
-    z-index: 99999;
+    min-height: 0 !important;
+    height: auto;
+    overflow: visible;
   }
-  .resume-top, .offshore-sidebar, .section, .section-box, .template-2 .section, .template-1 .resume-top, .template-3 .offshore-sidebar {
+  /* Garante que os blocos do currículo se comportem como blocos */
+  .resume, .resume-top, .resume-body, .section, .section-box, 
+  .contact, .offshore-layout, .offshore-sidebar, .offshore-main {
+    display: block !important;
+  }
+  /* Mantém cores */
+  .resume-top, .offshore-sidebar, .section, .section-box,
+  .template-2 .section, .template-1 .resume-top, .template-3 .offshore-sidebar {
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
-  .section, .section-box {
-    break-inside: avoid;
-    page-break-inside: avoid;
+  /* Remove altura mínima do template 3 */
+  .template-3 .offshore-layout {
+    min-height: 0 !important;
+    height: auto;
+  }
+  /* Contatos empilhados verticalmente */
+  .contact {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .contact span, .contact > span, .contact > div {
+    display: block;
   }
   .template-2 .contact {
     white-space: normal;
-    flex-wrap: wrap;
+    display: block !important;
   }
-  .template-3 .offshore-layout {
-    display: grid !important;
-    grid-template-columns: 280px 1fr !important;
-    min-height: 100vh !important;
+  .template-2 .contact span, .template-2 .contact > span {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .template-3 .offshore-sidebar .side-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .template-3 .offshore-photo {
+    max-width: 140px;
+    height: auto;
+    margin: 0 auto 15px;
+  }
+  .resume-wrap {
+    padding: 0 !important;
+    background: white !important;
+    margin: 0 !important;
+  }
+  /* Permite quebras de página naturais dentro das seções */
+  .section, .section-box {
+    break-inside: auto;
+    page-break-inside: auto;
   }
 }
+
 @media (max-width: 1100px) {
   .dashboard { grid-template-columns: 1fr; }
   .form-card { position: relative; height: auto; margin-bottom: 20px; }
@@ -254,11 +287,16 @@ button:hover{ transform:translateY(-2px); }
       <div class="input-group"><label>Nome completo</label><input id="nome" placeholder="Ex: Juliana Santiago"></div>
       <div class="input-group"><label>Cargo / Área</label><input id="cargo" placeholder="Ex: Designer Gráfico"></div>
       <div class="input-group"><label>Telefone</label><input id="telefone" placeholder="(11) 99999-9999"></div>
+      <div class="input-group">
+        <label>LinkedIn (opcional)</label>
+        <input id="linkedin" placeholder="linkedin.com/in/seu-perfil">
+        <label style="display: flex; align-items: center; gap: 8px; margin-top: 5px;">
+          <input type="checkbox" id="mostrarLinkedin" checked> Mostrar LinkedIn no currículo
+        </label>
+      </div>
       <div class="input-group"><label>E-mail</label><input id="email" placeholder="contato@exemplo.com"></div>
       <div class="input-group"><label>Cidade / Estado</label><input id="cidade" placeholder="São Paulo - SP"></div>
-      
       <div class="input-group"><label>Objetivo profissional</label><textarea id="objetivo" placeholder="Descreva seu objetivo profissional..."></textarea></div>
-      
       <div class="input-group"><label>Experiências</label>
         <div class="textarea-toolbar">
           <button type="button" data-target="experiencias" class="format-btn" data-format="bold"><b>N</b></button>
@@ -291,7 +329,6 @@ button:hover{ transform:translateY(-2px); }
         </div>
         <textarea id="habilidades" placeholder="Digite suas habilidades..."></textarea>
       </div>
-      
       <div class="input-group" id="fotoGroup"><label>Foto do candidato</label><input type="file" id="foto" accept="image/*"></div>
       <div class="input-group"><label>Título Experiência</label><input id="tituloExperiencia" value="EXPERIÊNCIA PROFISSIONAL"></div>
       <div class="input-group"><label>Título Formação</label><input id="tituloFormacao" value="FORMAÇÃO"></div>
@@ -300,7 +337,6 @@ button:hover{ transform:translateY(-2px); }
       <div id="customSectionsContainer"></div>
       <div class="btn-group">
         <button class="btn-gold" id="btnGerarPDF"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
-        <button class="btn-light" id="btnPreviewPDF"><i class="fas fa-eye"></i> Pré‑visualizar PDF</button>
         <button class="btn-dark" id="btnSalvarNuvem"><i class="fas fa-cloud-upload-alt"></i> Salvar na nuvem</button>
         <button class="btn-light" id="btnSalvarLocal"><i class="fas fa-save"></i> Salvar local</button>
         <button class="btn-light" id="btnLimparCampos"><i class="fas fa-eraser"></i> Limpar dados</button>
@@ -318,7 +354,7 @@ button:hover{ transform:translateY(-2px); }
       <h2><i class="fas fa-eye"></i> Pré-visualização 
         <button id="editModeBtn" class="edit-mode-btn" title="Editar diretamente no currículo"><i class="fas fa-pencil-alt"></i></button>
         <button id="spacingBtn" class="spacing-btn" title="Ajustar espaçamento"><i class="fas fa-arrows-alt"></i></button>
-        <button id="styleBtn" class="style-btn" title="Alterar fonte e tamanho"><i class="fas fa-font"></i></button>
+        <button id="styleBtn" class="style-btn" title="Alterar fonte e tamanhos"><i class="fas fa-font"></i></button>
         <button id="mobileViewBtn" class="mobile-view-btn" title="Visualização móvel"><i class="fas fa-mobile-alt"></i></button>
       </h2>
       <div>
@@ -343,7 +379,7 @@ button:hover{ transform:translateY(-2px); }
   </div>
 </div>
 
-<!-- Modais (mesmos do original) -->
+<!-- Modal de espaçamento -->
 <div id="spacingModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:260px;">
   <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Ajustar espaçamento</strong><button id="closeSpacing" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
   <label>Margem externa: <span id="marginValue">0</span>px</label><input type="range" id="marginSlider" min="0" max="40" value="0" step="2">
@@ -351,19 +387,45 @@ button:hover{ transform:translateY(-2px); }
   <button id="resetSpacing" style="margin-top:12px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%; cursor:pointer;">Resetar</button>
 </div>
 
-<div id="styleModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:280px;">
-  <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Estilos</strong><button id="closeStyle" style="float:right;">&times;</button></div>
-  <label>Fonte:</label><select id="fontFamilySelect" style="width:100%; margin-bottom:12px; padding:6px; border-radius:8px;"><option value="Inter">Inter</option><option value="'Cormorant Garamond', serif">Cormorant</option><option value="'Playfair Display', serif">Playfair</option><option value="Georgia, serif">Georgia</option></select>
-  <label>Tamanho: <span id="fontSizeValue">14</span>px</label><input type="range" id="fontSizeSlider" min="9" max="20" value="14" step="1">
-  <div style="display:flex; gap:8px; margin-bottom:12px;"><button class="font-size-btn" data-size="12">12px</button><button class="font-size-btn" data-size="14">14px</button><button class="font-size-btn" data-size="16">16px</button><button class="font-size-btn" data-size="18">18px</button></div>
-  <button id="resetStyles" style="background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%;">Resetar</button>
+<!-- Modal de estilos -->
+<div id="styleModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; box-shadow:0 4px 20px rgba(0,0,0,0.2); z-index:10001; width:300px;">
+  <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Estilos do currículo</strong><button id="closeStyle" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
+  <label>Família da fonte:</label>
+  <select id="fontFamilySelect" style="width:100%; margin-bottom:12px; padding:6px; border-radius:8px;">
+    <option value="Inter">Inter</option>
+    <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+    <option value="'Playfair Display', serif">Playfair Display</option>
+    <option value="Georgia, serif">Georgia</option>
+    <option value="'Times New Roman', serif">Times New Roman</option>
+    <option value="'Montserrat', sans-serif">Montserrat</option>
+    <option value="'Poppins', sans-serif">Poppins</option>
+    <option value="'Roboto', sans-serif">Roboto</option>
+  </select>
+  <hr style="margin:10px 0;">
+  <label>Tamanho do Nome: <span id="nomeSizeValue">32</span>px</label>
+  <input type="range" id="nomeSizeSlider" min="20" max="60" value="32" step="1">
+  <label>Tamanho do Cargo: <span id="cargoSizeValue">18</span>px</label>
+  <input type="range" id="cargoSizeSlider" min="12" max="40" value="18" step="1">
+  <label>Tamanho dos Títulos: <span id="tituloSizeValue">22</span>px</label>
+  <input type="range" id="tituloSizeSlider" min="12" max="36" value="22" step="1">
+  <label>Tamanho do Texto Normal: <span id="textoSizeValue">14</span>px</label>
+  <input type="range" id="textoSizeSlider" min="9" max="22" value="14" step="1">
+  <button id="resetStyles" style="margin-top:12px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%;">Resetar estilos</button>
 </div>
 
 <div id="modalCadastros" class="modal">
   <div class="modal-content">
     <div class="modal-header"><h3>Dados salvos</h3><button id="fecharModal">&times;</button></div>
-    <div class="modal-tabs"><button class="tab-btn active" data-tab="leads">Leads</button><button class="tab-btn" data-tab="curriculos-local">Local</button><button class="tab-btn" data-tab="curriculos-cloud">Nuvem</button></div>
-    <div class="modal-body"><div id="tabLeads"></div><div id="tabCurriculosLocal"></div><div id="tabCurriculosCloud"></div></div>
+    <div class="modal-tabs">
+      <button class="tab-btn active" data-tab="leads">📋 Leads</button>
+      <button class="tab-btn" data-tab="curriculos-local">💾 Currículos locais</button>
+      <button class="tab-btn" data-tab="curriculos-cloud">☁️ Currículos na nuvem</button>
+    </div>
+    <div class="modal-body">
+      <div id="tabLeads" class="tab-content" style="display:block;"><p>Carregando...</p></div>
+      <div id="tabCurriculosLocal" class="tab-content" style="display:none;"><p>Carregando...</p></div>
+      <div id="tabCurriculosCloud" class="tab-content" style="display:none;"><p>Carregando...</p></div>
+    </div>
   </div>
 </div>
 
@@ -402,25 +464,14 @@ button:hover{ transform:translateY(-2px); }
     animationId = requestAnimationFrame(draw);
   }
   draw();
-  window.stopParticles = function() { 
-    active = false; 
-    if(animationId) cancelAnimationFrame(animationId); 
-  };
+  window.stopParticles = function() { active = false; if(animationId) cancelAnimationFrame(animationId); };
 })();
 
 // ========== ABRIR DASHBOARD ==========
 const splashDiv = document.getElementById('splash');
 const dashboardDiv = document.getElementById('dashboard');
 const enterBtn = document.getElementById('enterBtn');
-
-function fecharSplash() {
-  splashDiv.classList.add('hide');
-  if (window.stopParticles) window.stopParticles();
-  setTimeout(() => {
-    dashboardDiv.classList.add('show');
-  }, 400);
-}
-
+function fecharSplash() { splashDiv.classList.add('hide'); if(window.stopParticles) window.stopParticles(); setTimeout(()=>dashboardDiv.classList.add('show'),400); }
 if (splashDiv) splashDiv.addEventListener('click', fecharSplash);
 if (splashDiv) splashDiv.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') fecharSplash(); });
 if (enterBtn) enterBtn.addEventListener('click', fecharSplash);
@@ -434,7 +485,7 @@ function initSupabase(){ if(!supabaseClient) supabaseClient = window.supabase.cr
 // ========== GERENCIAMENTO DE SEÇÕES ==========
 let sectionsOrder = [], customSections = [];
 const predefinedSections = [
-  { id: 'objetivo', type: 'predefined', title: 'OBJETIVO', fieldId: 'objetivo' },
+  { id: 'objetivo', type: 'predefined', title: 'OBJETIVO PROFISSIONAL', fieldId: 'objetivo' },
   { id: 'formacao', type: 'predefined', title: 'FORMAÇÃO', fieldId: 'formacao' },
   { id: 'experiencias', type: 'predefined', title: 'EXPERIÊNCIAS E PROJETOS', fieldId: 'experiencias' },
   { id: 'cursos', type: 'predefined', title: 'CURSOS COMPLEMENTARES', fieldId: 'cursos' },
@@ -453,17 +504,24 @@ function saveSectionsOrder() { localStorage.setItem('curriculoSectionsOrder', JS
 function addCustomSection(title) { if(!title.trim()) return; const newId = 'custom_'+Date.now(); customSections.push({ id: newId, title: title.trim(), content: '' }); sectionsOrder.push({ id: newId, type: 'custom', title: title.trim() }); saveSectionsOrder(); renderSectionsModal(); renderCustomFieldsInForm(); renderResume(); }
 function removeCustomSection(id) { customSections = customSections.filter(s=>s.id!==id); sectionsOrder = sectionsOrder.filter(s=>s.id!==id); saveSectionsOrder(); renderSectionsModal(); renderCustomFieldsInForm(); renderResume(); }
 function reorderSections(newOrder) { sectionsOrder = newOrder; saveSectionsOrder(); renderSectionsModal(); renderResume(); }
-function renderSectionsModal() { const list = document.getElementById('sectionsList'); if(!list) return; list.innerHTML = sectionsOrder.map((sec,idx)=>`<li><span>${sec.type==='custom'?`<input type="text" value="${escapeHtml(sec.title)}" data-id="${sec.id}" class="edit-custom-title">`:escapeHtml(sec.title)}</span><div><button class="move-up" data-idx="${idx}">▲</button><button class="move-down" data-idx="${idx}">▼</button>${sec.type==='custom'?`<button class="remove-custom" data-id="${sec.id}">✖</button>`:''}</div></li>`).join(''); }
-function renderCustomFieldsInForm() { const container = document.getElementById('customSectionsContainer'); container.innerHTML = ''; for(let cs of customSections) { const div = document.createElement('div'); div.className = 'input-group'; div.innerHTML = `<label>${escapeHtml(cs.title)}</label><textarea id="custom_${cs.id}" placeholder="Digite o conteúdo...">${escapeHtml(cs.content)}</textarea>`; container.appendChild(div); div.querySelector('textarea').addEventListener('input', (e) => { cs.content = e.target.value; saveSectionsOrder(); renderResume(); }); } }
-
-// ========== FUNÇÃO DE ENTER NORMAL ==========
-function setupEnterNormal() {
-  const textareas = ['experiencias', 'formacao', 'cursos', 'habilidades'];
-  textareas.forEach(id => {
-    const textarea = document.getElementById(id);
-    if (!textarea) return;
-    textarea.addEventListener('keydown', (e) => {});
-  });
+function renderSectionsModal() { 
+  const list = document.getElementById('sectionsList'); if(!list) return; 
+  list.innerHTML = sectionsOrder.map((sec,idx)=>`<li><span>${sec.type==='custom'?`<input type="text" value="${escapeHtml(sec.title)}" data-id="${sec.id}" class="edit-custom-title">`:escapeHtml(sec.title)}</span><div><button class="move-up" data-idx="${idx}">▲</button><button class="move-down" data-idx="${idx}">▼</button>${sec.type==='custom'?`<button class="remove-custom" data-id="${sec.id}">✖</button>`:''}</div></li>`).join('');
+  document.querySelectorAll('.move-up').forEach(btn => btn.addEventListener('click', () => { const idx = parseInt(btn.dataset.idx); if(idx>0){ const newOrder = [...sectionsOrder]; [newOrder[idx-1], newOrder[idx]] = [newOrder[idx], newOrder[idx-1]]; reorderSections(newOrder); } }));
+  document.querySelectorAll('.move-down').forEach(btn => btn.addEventListener('click', () => { const idx = parseInt(btn.dataset.idx); if(idx < sectionsOrder.length-1){ const newOrder = [...sectionsOrder]; [newOrder[idx+1], newOrder[idx]] = [newOrder[idx], newOrder[idx+1]]; reorderSections(newOrder); } }));
+  document.querySelectorAll('.remove-custom').forEach(btn => btn.addEventListener('click', () => { removeCustomSection(btn.dataset.id); }));
+  document.querySelectorAll('.edit-custom-title').forEach(input => { input.addEventListener('change', () => { const cs = customSections.find(s => s.id === input.dataset.id); if(cs){ cs.title = input.value; const orderItem = sectionsOrder.find(s => s.id === input.dataset.id); if(orderItem) orderItem.title = input.value; saveSectionsOrder(); renderSectionsModal(); renderCustomFieldsInForm(); renderResume(); } }); });
+}
+function renderCustomFieldsInForm() { 
+  const container = document.getElementById('customSectionsContainer'); 
+  container.innerHTML = ''; 
+  for(let cs of customSections) { 
+    const div = document.createElement('div'); 
+    div.className = 'input-group'; 
+    div.innerHTML = `<label>${escapeHtml(cs.title)}</label><textarea id="custom_${cs.id}" placeholder="Digite o conteúdo...">${escapeHtml(cs.content)}</textarea>`; 
+    container.appendChild(div); 
+    div.querySelector('textarea').addEventListener('input', (e) => { cs.content = e.target.value; saveSectionsOrder(); renderResume(); }); 
+  } 
 }
 
 // ========== FORMATAÇÃO DE TEXTO ==========
@@ -519,7 +577,7 @@ document.querySelectorAll('.format-btn').forEach(btn => {
 });
 
 // ========== EDITOR PRINCIPAL ==========
-const ids = ['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','tituloExperiencia','tituloFormacao','tituloCursos','tituloHabilidades'];
+const ids = ['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','tituloExperiencia','tituloFormacao','tituloCursos','tituloHabilidades','linkedin'];
 const inputs = {};
 ids.forEach(id=>inputs[id]=document.getElementById(id));
 const resumeDiv = document.getElementById('resume');
@@ -531,13 +589,38 @@ const colorThemes = {
   white: { t1:{start:'#ffffff',end:'#eeeeee',text:'#1e293b',accent:'#082642'}, t3:{start:'#ffffff',end:'#eaeaea',text:'#1e293b',accent:'#082642',border:'rgba(8,38,66,.2)'} }
 };
 function escapeHtml(t){ return (t||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function getData(){ return { nome:inputs.nome.value||'Seu Nome', cargo:inputs.cargo.value||'Cargo', telefone:inputs.telefone.value||'(00) 00000-0000', email:inputs.email.value||'email@exemplo.com', cidade:inputs.cidade.value||'Cidade', objetivo:inputs.objetivo.value||'Objetivo...', experiencias:inputs.experiencias.value||'', formacao:inputs.formacao.value||'', cursos:inputs.cursos.value||'', habilidades:inputs.habilidades.value||'' }; }
+function getData(){ return { nome:inputs.nome.value||'Seu Nome', cargo:inputs.cargo.value||'Cargo', telefone:inputs.telefone.value||'(00) 00000-0000', email:inputs.email.value||'email@exemplo.com', cidade:inputs.cidade.value||'Cidade', objetivo:inputs.objetivo.value||'Objetivo...', experiencias:inputs.experiencias.value||'', formacao:inputs.formacao.value||'', cursos:inputs.cursos.value||'', habilidades:inputs.habilidades.value||'', linkedin:inputs.linkedin.value||'' }; }
 function salvarEstado(){ lastState = JSON.stringify(hiddenSections); }
 function desfazerAcao(){ if(lastState){ hiddenSections = JSON.parse(lastState); renderResume(); } }
 function toggleSection(s){ salvarEstado(); hiddenSections[s]=!hiddenSections[s]; renderResume(); }
 function applyCustomSpacing(){ const m=localStorage.getItem('currMargin')||0, s=localStorage.getItem('currSectionMargin')||28; const r=document.querySelector('.resume'); if(r) r.style.padding=m+'px'; document.querySelectorAll('.section, .section-box').forEach(el=>el.style.marginBottom=s+'px'); }
-function applyFontStyles(){ const f=localStorage.getItem('currFontFamily')||'Inter', sz=localStorage.getItem('currFontSize')||'14'; const r=document.getElementById('resume'); if(r){ r.style.fontFamily=f; r.style.fontSize=sz+'px'; } }
-function resetStyles(){ localStorage.removeItem('currFontFamily'); localStorage.removeItem('currFontSize'); applyFontStyles(); renderResume(); }
+function applyFontStyles(){ 
+  const f = localStorage.getItem('currFontFamily') || 'Inter';
+  const nomeSize = localStorage.getItem('nomeSize') || '32';
+  const cargoSize = localStorage.getItem('cargoSize') || '18';
+  const tituloSize = localStorage.getItem('tituloSize') || '22';
+  const textSize = localStorage.getItem('textoSize') || '14';
+  const r = document.getElementById('resume'); 
+  if(r){ 
+    r.style.fontFamily = f; 
+    r.style.fontSize = textSize + 'px'; 
+    const nomeElem = r.querySelector('.resume-name, .offshore-name');
+    if(nomeElem) nomeElem.style.fontSize = nomeSize + 'px';
+    const cargoElem = r.querySelector('.resume-role, .offshore-role');
+    if(cargoElem) cargoElem.style.fontSize = cargoSize + 'px';
+    const titulos = r.querySelectorAll('.section h3, .section-box h3, .side-title');
+    titulos.forEach(el => el.style.fontSize = tituloSize + 'px');
+  }
+  document.getElementById('nomeSizeSlider') && (document.getElementById('nomeSizeSlider').value = nomeSize);
+  document.getElementById('cargoSizeSlider') && (document.getElementById('cargoSizeSlider').value = cargoSize);
+  document.getElementById('tituloSizeSlider') && (document.getElementById('tituloSizeSlider').value = tituloSize);
+  document.getElementById('textoSizeSlider') && (document.getElementById('textoSizeSlider').value = textSize);
+  document.getElementById('nomeSizeValue') && (document.getElementById('nomeSizeValue').innerText = nomeSize);
+  document.getElementById('cargoSizeValue') && (document.getElementById('cargoSizeValue').innerText = cargoSize);
+  document.getElementById('tituloSizeValue') && (document.getElementById('tituloSizeValue').innerText = tituloSize);
+  document.getElementById('textoSizeValue') && (document.getElementById('textoSizeValue').innerText = textSize);
+}
+function resetStyles(){ localStorage.removeItem('currFontFamily'); localStorage.removeItem('nomeSize'); localStorage.removeItem('cargoSize'); localStorage.removeItem('tituloSize'); localStorage.removeItem('textoSize'); applyFontStyles(); renderResume(); }
 function enableInlineEditing() {}
 function disableInlineEditing() {}
 function renderResume(){
@@ -549,7 +632,7 @@ function renderResume(){
   let sectionsHtml = '';
   for(let sec of sectionsOrder) {
     if(sec.type === 'predefined') {
-      if(sec.id === 'objetivo') sectionsHtml += `<div class="section"><h3><span>OBJETIVO</span></h3>${objetivoPar}</div>`;
+      if(sec.id === 'objetivo') sectionsHtml += `<div class="section"><h3><span>OBJETIVO PROFISSIONAL</span></h3>${objetivoPar}</div>`;
       else if(sec.id === 'formacao' && !hiddenSections.form) sectionsHtml += `<div class="section"><h3><span>${tF}</span></h3>${formatContent(d.formacao)}</div>`;
       else if(sec.id === 'experiencias' && !hiddenSections.exp) sectionsHtml += `<div class="section"><h3><span>${tE}</span></h3>${formatContent(d.experiencias)}</div>`;
       else if(sec.id === 'cursos' && !hiddenSections.cursos) sectionsHtml += `<div class="section"><h3><span>${tC}</span></h3>${formatContent(d.cursos)}</div>`;
@@ -560,13 +643,17 @@ function renderResume(){
     }
   }
   let html = '';
-  if(currentTemplate === 1) html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact"><span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span><span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span></div></div><div class="resume-body">${sectionsHtml}</div>`;
-  else if(currentTemplate === 2) html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
-  else {
+  const mostrarLinkedin = document.getElementById('mostrarLinkedin').checked && d.linkedin.trim() !== '';
+  
+  if(currentTemplate === 1){
+    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact"><span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span><span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>${mostrarLinkedin ? `<span><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : ''}<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span></div></div><div class="resume-body">${sectionsHtml}</div>`;
+  } else if(currentTemplate === 2){
+    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)}${mostrarLinkedin ? ` &nbsp; <i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}` : ''} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
+  } else {
     let mainSections = '';
     for(let sec of sectionsOrder) {
       if(sec.type === 'predefined') {
-        if(sec.id === 'objetivo') mainSections += `<div class="section-box"><h3>OBJETIVO</h3>${objetivoPar}</div>`;
+        if(sec.id === 'objetivo') mainSections += `<div class="section-box"><h3>OBJETIVO PROFISSIONAL</h3>${objetivoPar}</div>`;
         else if(sec.id === 'formacao' && !hiddenSections.form) mainSections += `<div class="section-box"><h3>${tF}</h3>${formatContent(d.formacao)}</div>`;
         else if(sec.id === 'experiencias' && !hiddenSections.exp) mainSections += `<div class="section-box"><h3>${tE}</h3>${formatContent(d.experiencias)}</div>`;
         else if(sec.id === 'cursos' && !hiddenSections.cursos) mainSections += `<div class="section-box"><h3>${tC}</h3>${formatContent(d.cursos)}</div>`;
@@ -576,74 +663,185 @@ function renderResume(){
         if(cs) mainSections += `<div class="section-box"><h3>${escapeHtml(cs.title)}</h3>${formatContent(cs.content)}</div>`;
       }
     }
-    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoBase64 ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : ''}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">📞 ${escapeHtml(d.telefone)}<br>✉ ${escapeHtml(d.email)}<br>📍 ${escapeHtml(d.cidade)}</div>${!hiddenSections.hab ? `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>` : ''}</div><div class="offshore-main">${mainSections}</div></div>`;
+    let contactHtml = `📞 ${escapeHtml(d.telefone)}<br>✉ ${escapeHtml(d.email)}`;
+    if(mostrarLinkedin) contactHtml += `<br><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}`;
+    contactHtml += `<br>📍 ${escapeHtml(d.cidade)}`;
+    
+    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoBase64 ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : ''}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${!hiddenSections.hab ? `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>` : ''}</div><div class="offshore-main">${mainSections}</div></div>`;
   }
   resumeDiv.className = `resume template-${currentTemplate}`;
   resumeDiv.innerHTML = html;
   if (editMode) enableInlineEditing();
-  applyCustomSpacing(); applyFontStyles();
+  applyCustomSpacing(); 
+  applyFontStyles();
   if(currentTemplate === 3) { const img = document.querySelector('.offshore-photo'); if(img && !img.hasAttribute('data-click')){ img.setAttribute('data-click','1'); img.addEventListener('click',()=>document.getElementById('foto').click()); } }
 }
 function trocarTemplate(num){ currentTemplate=num; document.querySelectorAll('.temp-btn').forEach(b=>b.classList.remove('active')); document.querySelector(`[data-temp="${num}"]`).classList.add('active'); renderResume(); }
-function carregarDadosLocal(){ const raw = localStorage.getItem('curriculoPremium'); if(raw){ const data = JSON.parse(raw); Object.keys(inputs).forEach(k=>{ if(data[k] !== undefined) inputs[k].value = data[k]; }); if(data.__color) aplicarCor(data.__color); if(data.template) trocarTemplate(data.template); if(data.foto_base64) fotoBase64 = data.foto_base64; renderResume(); } }
-function limparDados(){ const campos=['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades']; campos.forEach(id=>{ if(inputs[id]) inputs[id].value=''; }); renderResume(); }
+function carregarDadosLocal(){ 
+  const raw = localStorage.getItem('curriculoPremium'); 
+  if(raw){ 
+    const data = JSON.parse(raw); 
+    Object.keys(inputs).forEach(k=>{ if(data[k] !== undefined) inputs[k].value = data[k]; }); 
+    if(data.__color) aplicarCor(data.__color); 
+    if(data.template) trocarTemplate(data.template); 
+    if(data.foto_base64) fotoBase64 = data.foto_base64; 
+    if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin; 
+    renderResume(); 
+  } 
+}
+function limparDados(){ 
+  const campos=['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','linkedin']; 
+  campos.forEach(id=>{ if(inputs[id]) inputs[id].value=''; }); 
+  renderResume(); 
+}
 function aplicarCor(nome){ if(!colorThemes[nome]) return; currentColor=nome; const r=document.documentElement.style, t=colorThemes[nome]; r.setProperty('--t1-bg-start',t.t1.start); r.setProperty('--t1-bg-end',t.t1.end); r.setProperty('--t1-text',t.t1.text); r.setProperty('--t1-accent',t.t1.accent); r.setProperty('--t3-bg-start',t.t3.start); r.setProperty('--t3-bg-end',t.t3.end); r.setProperty('--t3-text',t.t3.text); r.setProperty('--t3-accent',t.t3.accent); r.setProperty('--t3-border',t.t3.border); renderResume(); }
 
-// ========== PDF PROFISSIONAL USANDO window.print() com @media print ==========
-function gerarPDFComPrint() {
-  // Salva o título original e define um título vazio para evitar que apareça no PDF
+// ========== PDF ==========
+function gerarPDF() {
   const originalTitle = document.title;
   document.title = '';
-  // Chama a impressão nativa (usará as regras @media print)
   window.print();
-  // Restaura o título após um pequeno delay
-  setTimeout(() => {
-    document.title = originalTitle;
-  }, 500);
+  setTimeout(() => { document.title = originalTitle; }, 500);
 }
-document.getElementById('btnGerarPDF').addEventListener('click', gerarPDFComPrint);
-
-// ========== PRÉ-VISUALIZAÇÃO DO PDF (usando html2pdf, mantida) ==========
-function gerarPrevisualizacaoPDF() {
-  const element = document.getElementById('resume');
-  const nomeArquivo = document.getElementById('nome').value.trim() || 'curriculo';
-  const opt = {
-    margin: [0, 0, 0, 0],
-    filename: `${nomeArquivo}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, letterRendering: true, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] }
-  };
-  html2pdf().set(opt).from(element).outputPdf().then(pdf => {
-    const blob = new Blob([pdf], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-    URL.revokeObjectURL(url);
-  }).catch(err => {
-    console.error(err);
-    alert('Erro ao gerar pré-visualização.');
-  });
-}
-document.getElementById('btnPreviewPDF').addEventListener('click', gerarPrevisualizacaoPDF);
+document.getElementById('btnGerarPDF').addEventListener('click', gerarPDF);
 
 // ========== SALVAR LOCAL ==========
-document.getElementById('btnSalvarLocal').addEventListener('click', () => { const dados={}; Object.keys(inputs).forEach(k=>dados[k]=inputs[k].value); dados.__color=currentColor; dados.template=currentTemplate; dados.foto_base64=fotoBase64; localStorage.setItem('curriculoPremium',JSON.stringify(dados)); alert('✅ Salvo localmente!'); });
+document.getElementById('btnSalvarLocal').addEventListener('click', () => { 
+  const dados = {}; 
+  Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
+  dados.__color = currentColor; 
+  dados.template = currentTemplate; 
+  dados.foto_base64 = fotoBase64; 
+  dados.mostrarLinkedin = document.getElementById('mostrarLinkedin').checked;
+  localStorage.setItem('curriculoPremium', JSON.stringify(dados)); 
+  alert('✅ Currículo salvo localmente!'); 
+});
 // ========== SALVAR NA NUVEM ==========
-document.getElementById('btnSalvarNuvem').addEventListener('click', async () => { const dados={}; Object.keys(inputs).forEach(k=>dados[k]=inputs[k].value); dados.cor=currentColor; dados.template=currentTemplate; dados.foto_base64=fotoBase64; const sup=initSupabase(); const dadosLower={}; for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()]=v; const {error}=await sup.from('curriculos').insert([dadosLower]); alert(error?'❌ Erro: '+error.message:'✅ Salvo na nuvem!'); });
+document.getElementById('btnSalvarNuvem').addEventListener('click', async () => { 
+  const dados = {}; 
+  Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
+  dados.cor = currentColor; 
+  dados.template = currentTemplate; 
+  dados.foto_base64 = fotoBase64; 
+  dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked;
+  const sup = initSupabase(); 
+  const dadosLower = {}; 
+  for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
+  const { error } = await sup.from('curriculos').insert([dadosLower]); 
+  alert(error ? '❌ Erro: '+error.message : '✅ Salvo na nuvem!'); 
+});
 document.getElementById('btnLimparCampos').addEventListener('click', limparDados);
 document.getElementById('desfazerBtn').addEventListener('click', () => renderResume());
 
 // ========== MODAL LEADS ==========
-const modal = document.getElementById('modalCadastros'), btnVer = document.getElementById('btnVerCadastros'), fecharModal = document.getElementById('fecharModal');
+const modal = document.getElementById('modalCadastros');
+const btnVer = document.getElementById('btnVerCadastros');
+const fecharModal = document.getElementById('fecharModal');
 btnVer.addEventListener('click', () => { modal.classList.add('show'); carregarLeads(); carregarCurriculoLocal(); carregarCurriculosCloud(); });
 fecharModal.addEventListener('click', () => modal.classList.remove('show'));
-async function carregarLeads() { const sup=initSupabase(); const {data}=await sup.from('cadastros').select('*').order('created_at',{ascending:false}); document.getElementById('tabLeads').innerHTML=data?.map(item=>`<div class="lista-item"><strong>${escapeHtml(item.nome)}</strong><br>📞 ${escapeHtml(item.telefone)}<br>✉️ ${escapeHtml(item.email)}</div>`).join('')||'<p>Nenhum lead.</p>'; }
-function carregarCurriculoLocal() { const saved=localStorage.getItem('curriculoPremium'); if(saved){ const data=JSON.parse(saved); document.getElementById('tabCurriculosLocal').innerHTML=`<div class="lista-item"><strong>${escapeHtml(data.nome||'Sem nome')}</strong><br><button class="btn-carregar" onclick="carregarCurriculoDoLocalStorage()">Carregar</button></div>`; } else document.getElementById('tabCurriculosLocal').innerHTML='<p>Nenhum currículo local.</p>'; }
-window.carregarCurriculoDoLocalStorage = function() { const raw=localStorage.getItem('curriculoPremium'); if(raw){ const data=JSON.parse(raw); Object.keys(inputs).forEach(k=>{ if(data[k]!==undefined) inputs[k].value=data[k]; }); if(data.__color) aplicarCor(data.__color); if(data.template) trocarTemplate(data.template); if(data.foto_base64) fotoBase64=data.foto_base64; renderResume(); modal.classList.remove('show'); alert('Carregado!'); } };
-async function carregarCurriculosCloud() { const sup=initSupabase(); const {data}=await sup.from('curriculos').select('id,nome,cargo,updated_at').order('updated_at',{ascending:false}); document.getElementById('tabCurriculosCloud').innerHTML=data?.map(item=>`<div class="lista-item"><strong>${escapeHtml(item.nome||'Sem nome')}</strong> – ${escapeHtml(item.cargo||'')}<br><button class="btn-carregar" data-id="${item.id}">Carregar</button></div>`).join('')||'<p>Nenhum currículo.</p>'; document.querySelectorAll('#tabCurriculosCloud .btn-carregar').forEach(btn=>btn.addEventListener('click',async()=>{ const id=btn.dataset.id; const sup=initSupabase(); const {data}=await sup.from('curriculos').select('*').eq('id',id).single(); if(data){ Object.keys(inputs).forEach(k=>{ if(document.getElementById(k) && data[k.toLowerCase()]!==undefined) document.getElementById(k).value=data[k.toLowerCase()]; }); if(data.cor) aplicarCor(data.cor); if(data.template) trocarTemplate(data.template); if(data.foto_base64) fotoBase64=data.foto_base64; renderResume(); alert('Carregado!'); } })); }
+modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('show'); });
 
-// ========== BOTÕES LÁPIS, ESPAÇAMENTO, ESTILOS ==========
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabLeads = document.getElementById('tabLeads');
+const tabLocal = document.getElementById('tabCurriculosLocal');
+const tabCloud = document.getElementById('tabCurriculosCloud');
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(btn.dataset.tab === 'leads') { tabLeads.style.display='block'; tabLocal.style.display='none'; tabCloud.style.display='none'; carregarLeads(); }
+    else if(btn.dataset.tab === 'curriculos-local') { tabLeads.style.display='none'; tabLocal.style.display='block'; tabCloud.style.display='none'; carregarCurriculoLocal(); }
+    else { tabLeads.style.display='none'; tabLocal.style.display='none'; tabCloud.style.display='block'; carregarCurriculosCloud(); }
+  });
+});
+
+async function carregarLeads() {
+  const container = document.getElementById('tabLeads');
+  container.innerHTML = '<p><i class="fas fa-spinner fa-pulse"></i> Carregando leads...</p>';
+  try {
+    const sup = initSupabase();
+    const { data, error } = await sup.from('cadastros').select('*').order('created_at', { ascending: false });
+    if(error) throw error;
+    if(!data || data.length===0) { container.innerHTML = '<p>Nenhum lead encontrado.</p>'; return; }
+    container.innerHTML = '';
+    data.forEach(item => {
+      const div = document.createElement('div'); div.className = 'lista-item';
+      div.innerHTML = `<strong>${escapeHtml(item.nome)}</strong><br>📞 ${escapeHtml(item.telefone)}<br>✉️ ${escapeHtml(item.email)}<br><small>📅 ${new Date(item.created_at).toLocaleString('pt-BR')}</small>`;
+      container.appendChild(div);
+    });
+  } catch(err) { container.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`; }
+}
+
+function carregarCurriculoLocal() {
+  const container = document.getElementById('tabCurriculosLocal');
+  const saved = localStorage.getItem('curriculoPremium');
+  if(!saved) { container.innerHTML = '<p>Nenhum currículo salvo localmente.</p>'; return; }
+  try {
+    const data = JSON.parse(saved);
+    const nome = data.nome || 'Sem nome';
+    const cargo = data.cargo || 'Sem cargo';
+    container.innerHTML = `<div class="lista-item"><strong>${escapeHtml(nome)}</strong> – ${escapeHtml(cargo)}<br><button class="btn-carregar" onclick="carregarCurriculoDoLocalStorage()"><i class="fas fa-upload"></i> Carregar este currículo</button><small>Salvo localmente</small></div>`;
+  } catch(e) { container.innerHTML = '<p>Erro ao ler currículo local.</p>'; }
+}
+
+window.carregarCurriculoDoLocalStorage = function() {
+  const raw = localStorage.getItem('curriculoPremium');
+  if(!raw) return;
+  const data = JSON.parse(raw);
+  Object.keys(inputs).forEach(k => { if(data[k] !== undefined) inputs[k].value = data[k]; });
+  if(data.__color) aplicarCor(data.__color);
+  if(data.template) trocarTemplate(data.template);
+  if(data.foto_base64) fotoBase64 = data.foto_base64;
+  if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin;
+  renderResume();
+  modal.classList.remove('show');
+  alert('Currículo local carregado!');
+};
+
+async function carregarCurriculosCloud() {
+  const container = document.getElementById('tabCurriculosCloud');
+  container.innerHTML = '<p><i class="fas fa-spinner fa-pulse"></i> Carregando currículos da nuvem...</p>';
+  try {
+    const sup = initSupabase();
+    const { data, error } = await sup.from('curriculos').select('id, nome, cargo, updated_at').order('updated_at', { ascending: false });
+    if(error) throw error;
+    if(!data || data.length===0) { container.innerHTML = '<p>Nenhum currículo salvo na nuvem ainda.</p>'; return; }
+    container.innerHTML = '';
+    for(const item of data) {
+      const div = document.createElement('div'); div.className = 'lista-item';
+      div.innerHTML = `<strong>${escapeHtml(item.nome || 'Sem nome')}</strong> – ${escapeHtml(item.cargo || 'Sem cargo')}<br>
+                       <small>📅 ${item.updated_at ? new Date(item.updated_at).toLocaleString('pt-BR') : 'Data desconhecida'}</small><br>
+                       <button class="btn-carregar" data-id="${item.id}"><i class="fas fa-cloud-download-alt"></i> Carregar este currículo</button>`;
+      container.appendChild(div);
+    }
+    document.querySelectorAll('#tabCurriculosCloud .btn-carregar').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-id');
+        await carregarCurriculoDaNuvem(id);
+      });
+    });
+  } catch(err) { container.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`; }
+}
+
+async function carregarCurriculoDaNuvem(id) {
+  try {
+    const sup = initSupabase();
+    const { data, error } = await sup.from('curriculos').select('*').eq('id', id).single();
+    if(error) throw error;
+    if(data) {
+      Object.keys(inputs).forEach(k => { if(data[k.toLowerCase()] !== undefined) inputs[k].value = data[k.toLowerCase()]; });
+      if(data.cor) aplicarCor(data.cor);
+      if(data.template) trocarTemplate(data.template);
+      if(data.foto_base64) fotoBase64 = data.foto_base64;
+      if(data.mostrar_linkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrar_linkedin;
+      renderResume();
+      modal.classList.remove('show');
+      alert('Currículo carregado da nuvem!');
+    }
+  } catch(err) { alert('Erro ao carregar: '+err.message); }
+}
+
+// ========== BOTÕES ==========
 const editBtn = document.getElementById('editModeBtn');
 editBtn.addEventListener('click', () => { editMode = !editMode; if(editMode){ enableInlineEditing(); editBtn.classList.add('active'); } else { disableInlineEditing(); editBtn.classList.remove('active'); } });
 const spacingBtn = document.getElementById('spacingBtn'), spacingModalElem = document.getElementById('spacingModal'), closeSpacing = document.getElementById('closeSpacing');
@@ -654,8 +852,10 @@ document.getElementById('resetSpacing').onclick=()=>{ localStorage.removeItem('c
 const styleBtn = document.getElementById('styleBtn'), styleModalElem = document.getElementById('styleModal'), closeStyle = document.getElementById('closeStyle');
 styleBtn.onclick=()=>styleModalElem.style.display='block'; closeStyle.onclick=()=>styleModalElem.style.display='none';
 document.getElementById('fontFamilySelect').onchange=e=>{ localStorage.setItem('currFontFamily',e.target.value); applyFontStyles(); };
-document.getElementById('fontSizeSlider').oninput=e=>{ localStorage.setItem('currFontSize',e.target.value); document.getElementById('fontSizeValue').innerText=e.target.value; applyFontStyles(); };
-document.querySelectorAll('.font-size-btn').forEach(btn=>btn.addEventListener('click',()=>{ const size=btn.dataset.size; localStorage.setItem('currFontSize',size); document.getElementById('fontSizeSlider').value=size; document.getElementById('fontSizeValue').innerText=size; applyFontStyles(); }));
+document.getElementById('nomeSizeSlider').oninput=e=>{ localStorage.setItem('nomeSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('cargoSizeSlider').oninput=e=>{ localStorage.setItem('cargoSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('tituloSizeSlider').oninput=e=>{ localStorage.setItem('tituloSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('textoSizeSlider').oninput=e=>{ localStorage.setItem('textoSize',e.target.value); applyFontStyles(); renderResume(); };
 document.getElementById('resetStyles').addEventListener('click',resetStyles);
 document.getElementById('mobileViewBtn').addEventListener('click',()=>document.getElementById('resumeWrap').classList.toggle('mobile-preview'));
 // SEÇÕES
@@ -671,8 +871,8 @@ document.getElementById('foto').addEventListener('change',e=>{ const f=e.target.
 Object.values(inputs).forEach(i=>i.addEventListener('input',renderResume));
 document.querySelectorAll('.temp-btn').forEach(b=>b.addEventListener('click',()=>trocarTemplate(Number(b.dataset.temp))));
 document.querySelectorAll('[data-toggle-section]').forEach(btn=>btn.addEventListener('click',()=>toggleSection(btn.dataset.toggleSection)));
+document.getElementById('mostrarLinkedin').addEventListener('change', renderResume);
 carregarDadosLocal(); trocarTemplate(1); renderResume(); loadSectionsOrder(); renderCustomFieldsInForm();
-setupEnterNormal();
 </script>
 </body>
 </html>
