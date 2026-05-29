@@ -101,10 +101,10 @@ button:hover{ transform:translateY(-2px); }
 .preview-area{ background:white; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; }
 .preview-header{ padding:20px 24px; border-bottom:1px solid #e8eef5; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
 .preview-header h2{ color:var(--royal); display: flex; align-items: center; gap: 8px; }
-.edit-mode-btn, .spacing-btn, .style-btn, .mobile-view-btn, .justify-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--royal); padding: 4px 8px; border-radius: 30px; transition:0.2s; }
+.edit-mode-btn, .spacing-btn, .style-btn, .mobile-view-btn, .justify-btn, .advanced-spacing-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--royal); padding: 4px 8px; border-radius: 30px; transition:0.2s; }
 .edit-mode-btn { color: var(--gold); }
 .edit-mode-btn.active, .justify-btn.active { background: var(--gold); color: #0f172a; }
-.spacing-btn:hover, .style-btn:hover, .mobile-view-btn:hover, .justify-btn:hover { background: #f3f7fc; }
+.spacing-btn:hover, .style-btn:hover, .mobile-view-btn:hover, .justify-btn:hover, .advanced-spacing-btn:hover { background: #f3f7fc; }
 .template-selector{ display:flex; gap:8px; flex-wrap:wrap; }
 .temp-btn{ background:#f3f7fc; border:1px solid #d9e4ef; padding:6px 12px; border-radius:30px; font-size:.75rem; cursor:pointer; }
 .temp-btn.active{ background:var(--royal); color:white; }
@@ -115,17 +115,24 @@ button:hover{ transform:translateY(-2px); }
 .resume-wrap.mobile-preview{ max-width: 375px; margin: 0 auto; }
 .resume{ background:white; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,.06); }
 
-/* JUSTIFICAR TEXTO */
-#resume.text-justify p,
-#resume.text-justify li,
+/* JUSTIFICAR TEXTO – EXCLUINDO SIDEBAR E LINKEDIN */
 #resume.text-justify .section p,
+#resume.text-justify .section li,
 #resume.text-justify .section-box p,
-#resume.text-justify .side-info p,
-#resume.text-justify .side-info,
-#resume.text-justify .contact span,
-#resume.text-justify .offshore-main .section-box p,
-#resume.text-justify .offshore-sidebar .side-info {
+#resume.text-justify .section-box li {
   text-align: justify;
+}
+/* Sidebar sempre alinhada à esquerda (normal) */
+.template-3 .offshore-sidebar .side-info p,
+.template-3 .offshore-sidebar .side-info li,
+.template-3 .offshore-sidebar .contact,
+.template-3 .offshore-sidebar .side-title,
+.template-3 .offshore-sidebar .offshore-name,
+.template-3 .offshore-sidebar .offshore-role {
+  text-align: left !important;
+}
+.linkedin-span, .linkedin-text {
+  text-align: left !important;
 }
 
 /* TEMPLATES */
@@ -138,39 +145,48 @@ button:hover{ transform:translateY(-2px); }
 .section h3 span, .section-box h3{ border-left:4px solid var(--gold); padding-left:12px; }
 .section h3, .section-box h3 { margin-bottom: 20px; }
 .section p, .section-box p, .side-info p { margin-bottom: 12px; line-height: 1.5; }
-.section ul, .section-box ul { list-style: disc; margin-left: 20px; margin-bottom: 12px; }
+.section ul, .section-box ul {
+  list-style: disc;
+  margin-left: 0;
+  padding-left: 1.2rem;
+  margin-bottom: 12px;
+}
 .section li, .section-box li { margin-bottom: 5px; }
 
 .template-2 .resume-top{ background:white; border-bottom:2px solid var(--gold); padding:42px; color:var(--text); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-/* MODELO 3 */
+/* MODELO 3 - SIDEBAR ESTICA ATÉ O FINAL E PONTA ARREDONDADA */
 .template-3 .offshore-layout { 
   display: grid; 
   grid-template-columns: 280px 1fr; 
   align-items: stretch;
-  min-height: 100vh; 
 }
 .template-3 .offshore-sidebar { 
   background: linear-gradient(180deg, var(--t3-bg-start), var(--t3-bg-end)); 
   color: var(--t3-text); 
-  padding: 40px 28px; 
+  padding: 40px 32px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 .template-3 .offshore-photo { 
   width: 160px; 
   height: 160px; 
-  border-radius: 50%; 
   object-fit: cover; 
+  border-radius: 50%; 
   display: block; 
   margin: 0 auto 24px; 
   border: 4px solid var(--t3-border); 
   cursor: pointer; 
+  transition: opacity 0.2s;
 }
-.template-3 .offshore-photo:hover { opacity: 0.8; }
+.template-3 .offshore-photo:hover { opacity: 0.85; }
 .template-3 .offshore-name { 
   font-size: 1.8rem; 
   font-weight: 800; 
@@ -192,6 +208,54 @@ button:hover{ transform:translateY(-2px); }
 .template-3 .side-info { 
   line-height: 1.6; 
   font-size: 0.9rem; 
+}
+/* Formatação melhorada dos contatos */
+.template-3 .side-info .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.template-3 .side-info .contact-icon {
+  width: 24px;
+  text-align: center;
+  font-size: 1rem;
+}
+.template-3 .side-info .contact-text {
+  flex: 1;
+  word-break: break-word;
+}
+.template-3 .side-info .linkedin-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.template-3 .side-info .linkedin-text i {
+  width: 24px;
+  font-size: 1rem;
+  text-align: center;
+}
+/* Linha divisória suave (opcional) */
+.template-3 .offshore-sidebar .side-info .contact-item:not(:last-child),
+.template-3 .offshore-sidebar .side-info .linkedin-text:not(:last-child) {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
+}
+.template-3 .side-info ul {
+  list-style: disc;
+  margin-left: 0;
+  padding-left: 1.2rem;
+}
+.template-3 .side-info p {
+  margin-left: 0;
+  padding-left: 0;
+}
+.template-3 .offshore-main ul {
+  list-style: disc;
+  margin-left: 0;
+  padding-left: 1.2rem;
 }
 .template-3 .offshore-main { 
   padding: 40px; 
@@ -229,7 +293,7 @@ button:hover{ transform:translateY(-2px); }
 .lista-item { background:#f8fafc; border-radius:16px; padding:14px 18px; margin-bottom:12px; border-left:4px solid var(--gold); }
 .btn-carregar { background:var(--gold); color:#1e293b; border:none; padding:6px 14px; border-radius:30px; margin-top:8px; font-size:0.75rem; cursor:pointer; }
 
-/* ========== IMPRESSÃO (PDF) ========== */
+/* ========== IMPRESSÃO (PDF) – FOTO REDONDA E SIDEBAR NÃO REPETIR ========== */
 @media print {
   @page {
     margin: 0;
@@ -254,24 +318,40 @@ button:hover{ transform:translateY(-2px); }
     min-height: 0;
     height: auto;
     overflow: visible;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .resume-wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
   }
   .template-3 .offshore-layout {
     min-height: 100vh !important;
     height: auto !important;
     grid-template-columns: 250px 1fr !important;
-    break-inside: avoid;
+    break-inside: auto;
   }
   .template-3 .offshore-sidebar {
-    break-inside: avoid;
-    height: 100%;
+    height: 100% !important;
+    min-height: 100% !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border-radius: 0 0 24px 24px !important;
   }
   .template-3 .offshore-main {
     break-inside: auto;
   }
+  .resume {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
   .template-3 .offshore-photo {
-    max-width: 120px;
-    height: auto;
-    margin: 0 auto 15px;
+    width: 140px !important;
+    height: 140px !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    print-color-adjust: exact;
   }
   .resume-top, .offshore-sidebar, .section, .section-box,
   .template-2 .section, .template-1 .resume-top, .template-3 .offshore-sidebar {
@@ -295,14 +375,21 @@ button:hover{ transform:translateY(-2px); }
     display: block;
     margin-bottom: 4px;
   }
-  .resume-wrap {
-    padding: 0 !important;
-    background: white !important;
-    margin: 0 !important;
-  }
   .section, .section-box {
     break-inside: auto;
     page-break-inside: auto;
+  }
+  .offshore-main, .offshore-sidebar {
+    margin: 0;
+  }
+  /* Evita quebras feias nos contatos */
+  .template-3 .side-info .contact-item,
+  .template-3 .side-info .linkedin-text {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .template-3 .side-info .contact-item {
+    margin-bottom: 6px;
   }
 }
 
@@ -311,7 +398,7 @@ button:hover{ transform:translateY(-2px); }
   .form-card { position: relative; height: auto; margin-bottom: 20px; }
   .preview-header { flex-direction: column; align-items: stretch; }
   .template-3 .offshore-layout { grid-template-columns: 1fr; min-height: auto; }
-  .template-3 .offshore-sidebar { text-align: center; padding: 30px 20px; }
+  .template-3 .offshore-sidebar { text-align: center; padding: 30px 20px; border-radius: 0 0 20px 20px; }
   .template-3 .offshore-photo { margin: 0 auto 20px; }
   .btn-group button { font-size: 0.7rem; padding: 6px 10px; }
 }
@@ -340,13 +427,6 @@ button:hover{ transform:translateY(-2px); }
       <div class="input-group"><label>Nome completo</label><input id="nome" placeholder="Ex: Juliana Santiago"></div>
       <div class="input-group"><label>Cargo / Área</label><input id="cargo" placeholder="Ex: Designer Gráfico"></div>
       <div class="input-group"><label>Telefone</label><input id="telefone" placeholder="(11) 99999-9999"></div>
-      <div class="input-group">
-        <label>LinkedIn (opcional)</label>
-        <input id="linkedin" placeholder="linkedin.com/in/seu-perfil">
-        <label style="display: flex; align-items: center; gap: 8px; margin-top: 5px;">
-          <input type="checkbox" id="mostrarLinkedin" checked> Mostrar LinkedIn no currículo
-        </label>
-      </div>
       <div class="input-group"><label>E-mail</label><input id="email" placeholder="contato@exemplo.com"></div>
       <div class="input-group"><label>Cidade / Estado</label><input id="cidade" placeholder="São Paulo - SP"></div>
       <div class="input-group"><label>Objetivo profissional</label><textarea id="objetivo" placeholder="Descreva seu objetivo profissional..."></textarea></div>
@@ -384,32 +464,36 @@ button:hover{ transform:translateY(-2px); }
       </div>
       <div class="input-group" id="fotoGroup"><label>Foto do candidato</label><input type="file" id="foto" accept="image/*"></div>
       
-      <!-- Controles do Modelo 3 -->
-      <div class="input-group">
-        <label style="display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="habilidadesLateral" checked> Habilidades na lateral (Modelo 3)
-        </label>
-        <small style="font-size: 0.7rem;">Desmarque para mover as habilidades para a coluna principal</small>
+      <!-- Checkboxes organizados em grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="mostrarLinkedin" checked> Mostrar LinkedIn
+          </label>
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="habilidadesLateral" checked> Habilidades na lateral (Modelo 3)
+          </label>
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="mostrarFotoModelo3" checked> Mostrar foto (Modelo 3)
+          </label>
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="habilitarSecaoLateral"> Ativar seção lateral (Modelo 3)
+          </label>
+        </div>
       </div>
       
-      <div class="input-group">
-        <label style="display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="mostrarFotoModelo3" checked> Mostrar foto (Modelo 3)
-        </label>
-        <small style="font-size: 0.7rem;">Desmarque para ocultar a foto no currículo (apenas Modelo 3)</small>
+      <div id="secaoLateralFields" style="margin-bottom: 18px; display: none;">
+        <div class="input-group"><label>Título da seção lateral</label><input id="tituloSecaoLateral" placeholder="Ex: Idiomas, Certificações, etc."></div>
+        <div class="input-group"><label>Conteúdo da seção lateral</label><textarea id="conteudoSecaoLateral" placeholder="Digite o conteúdo..."></textarea></div>
       </div>
       
-      <!-- Nova seção lateral customizável -->
-      <div class="input-group">
-        <label style="display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="habilitarSecaoLateral"> Ativar seção adicional na lateral (Modelo 3)
-        </label>
-        <label>Título da seção lateral</label>
-        <input id="tituloSecaoLateral" placeholder="Ex: Idiomas, Certificações, etc.">
-        <label>Conteúdo da seção lateral</label>
-        <textarea id="conteudoSecaoLateral" placeholder="Digite o conteúdo..."></textarea>
-        <small style="font-size: 0.7rem;">Esta seção aparecerá na sidebar abaixo das habilidades (se ativa)</small>
-      </div>
+      <div class="input-group"><label>LinkedIn (opcional)</label><input id="linkedin" placeholder="linkedin.com/in/seu-perfil"></div>
       
       <div class="input-group"><label>Título Experiência</label><input id="tituloExperiencia" value="EXPERIÊNCIA PROFISSIONAL"></div>
       <div class="input-group"><label>Título Formação</label><input id="tituloFormacao" value="FORMAÇÃO"></div>
@@ -436,6 +520,7 @@ button:hover{ transform:translateY(-2px); }
       <h2><i class="fas fa-eye"></i> Pré-visualização 
         <button id="editModeBtn" class="edit-mode-btn" title="Editar diretamente no currículo"><i class="fas fa-pencil-alt"></i></button>
         <button id="spacingBtn" class="spacing-btn" title="Ajustar espaçamento"><i class="fas fa-arrows-alt"></i></button>
+        <button id="advancedSpacingBtn" class="advanced-spacing-btn" title="Espaçamentos avançados"><i class="fas fa-sliders-h"></i> Espaços</button>
         <button id="styleBtn" class="style-btn" title="Alterar fonte e tamanhos"><i class="fas fa-font"></i></button>
         <button id="justifyBtn" class="justify-btn" title="Justificar texto"><i class="fas fa-align-justify"></i> Justificar</button>
         <button id="mobileViewBtn" class="mobile-view-btn" title="Visualização móvel"><i class="fas fa-mobile-alt"></i></button>
@@ -462,12 +547,47 @@ button:hover{ transform:translateY(-2px); }
   </div>
 </div>
 
-<!-- Modais (spacing, style, cadastros, sections) -->
+<!-- Modais -->
 <div id="spacingModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:260px;">
   <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Ajustar espaçamento</strong><button id="closeSpacing" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
   <label>Margem externa: <span id="marginValue">0</span>px</label><input type="range" id="marginSlider" min="0" max="40" value="0" step="2">
   <label>Espaçamento entre seções: <span id="sectionValue">28</span>px</label><input type="range" id="sectionSlider" min="10" max="100" value="28" step="2">
   <button id="resetSpacing" style="margin-top:12px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%; cursor:pointer;">Resetar</button>
+</div>
+
+<div id="advancedSpacingModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:360px; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+  <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Espaçamentos & Posição da Foto</strong><button id="closeAdvancedSpacing" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
+  <div style="max-height: 450px; overflow-y: auto; padding-right: 5px;">
+    <label>Margem externa do currículo: <span id="advMarginValue">0</span>px</label>
+    <input type="range" id="advMarginSlider" min="0" max="40" value="0" step="2" style="width:100%; margin-bottom:12px;">
+    <label>Espaçamento entre seções: <span id="advSectionValue">28</span>px</label>
+    <input type="range" id="advSectionSlider" min="10" max="100" value="28" step="2" style="width:100%; margin-bottom:12px;">
+    <label>Padding da sidebar (esq/dir): <span id="sidebarPaddingX">32</span>px</label>
+    <input type="range" id="sidebarPaddingXSlider" min="12" max="60" value="32" step="2" style="width:100%; margin-bottom:8px;">
+    <label>Padding da sidebar (topo/baixo): <span id="sidebarPaddingY">40</span>px</label>
+    <input type="range" id="sidebarPaddingYSlider" min="20" max="80" value="40" step="2" style="width:100%; margin-bottom:12px;">
+    <label>Padding do conteúdo principal: <span id="mainPaddingValue">40</span>px</label>
+    <input type="range" id="mainPaddingSlider" min="20" max="80" value="40" step="2" style="width:100%; margin-bottom:12px;">
+    <label>Espaçamento entre itens de lista: <span id="listMarginValue">5</span>px</label>
+    <input type="range" id="listMarginSlider" min="0" max="20" value="5" step="1" style="width:100%; margin-bottom:12px;">
+    <label>Altura da linha (texto): <span id="lineHeightValue">1.5</span></label>
+    <input type="range" id="lineHeightSlider" min="1.2" max="2.0" value="1.5" step="0.05" style="width:100%; margin-bottom:12px;">
+    <label>Espaçamento entre contatos: <span id="contactGapValue">16</span>px</label>
+    <input type="range" id="contactGapSlider" min="6" max="32" value="16" step="2" style="width:100%; margin-bottom:12px;">
+    
+    <hr style="margin:12px 0;">
+    <strong>Ajustes da Foto (Modelo 3)</strong>
+    <label>Margem superior (px): <span id="photoMarginTopValue">0</span></label>
+    <input type="range" id="photoMarginTopSlider" min="-40" max="80" value="0" step="2" style="width:100%; margin-bottom:8px;">
+    <label>Margem inferior (px): <span id="photoMarginBottomValue">24</span></label>
+    <input type="range" id="photoMarginBottomSlider" min="0" max="60" value="24" step="2" style="width:100%; margin-bottom:8px;">
+    <label>Margem esquerda (px): <span id="photoMarginLeftValue">0</span></label>
+    <input type="range" id="photoMarginLeftSlider" min="-40" max="80" value="0" step="2" style="width:100%; margin-bottom:8px;">
+    <label>Margem direita (px): <span id="photoMarginRightValue">0</span></label>
+    <input type="range" id="photoMarginRightSlider" min="-40" max="80" value="0" step="2" style="width:100%; margin-bottom:8px;">
+    <button id="resetPhotoPosition" style="margin-top:8px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%; cursor:pointer;">Resetar posição da foto</button>
+  </div>
+  <button id="resetAdvancedSpacing" style="margin-top:12px; background:#d4af37; border:none; border-radius:20px; padding:6px; width:100%; cursor:pointer;">Resetar todos</button>
 </div>
 
 <div id="styleModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; box-shadow:0 4px 20px rgba(0,0,0,0.2); z-index:10001; width:300px;">
@@ -675,36 +795,80 @@ function getData(){ return { nome:inputs.nome.value||'Seu Nome', cargo:inputs.ca
 function salvarEstado(){ lastState = JSON.stringify(hiddenSections); }
 function desfazerAcao(){ if(lastState){ hiddenSections = JSON.parse(lastState); renderResume(); } }
 function toggleSection(s){ salvarEstado(); hiddenSections[s]=!hiddenSections[s]; renderResume(); }
-function applyCustomSpacing(){ const m=localStorage.getItem('currMargin')||0, s=localStorage.getItem('currSectionMargin')||28; const r=document.querySelector('.resume'); if(r) r.style.padding=m+'px'; document.querySelectorAll('.section, .section-box').forEach(el=>el.style.marginBottom=s+'px'); }
-function applyFontStyles(){ 
-  const f = localStorage.getItem('currFontFamily') || 'Inter';
-  const nomeSize = localStorage.getItem('nomeSize') || '32';
-  const cargoSize = localStorage.getItem('cargoSize') || '18';
-  const tituloSize = localStorage.getItem('tituloSize') || '22';
-  const textSize = localStorage.getItem('textoSize') || '14';
-  const r = document.getElementById('resume'); 
-  if(r){ 
-    r.style.fontFamily = f; 
-    r.style.fontSize = textSize + 'px'; 
-    const nomeElem = r.querySelector('.resume-name, .offshore-name');
-    if(nomeElem) nomeElem.style.fontSize = nomeSize + 'px';
-    const cargoElem = r.querySelector('.resume-role, .offshore-role');
-    if(cargoElem) cargoElem.style.fontSize = cargoSize + 'px';
-    const titulos = r.querySelectorAll('.section h3, .section-box h3, .side-title');
-    titulos.forEach(el => el.style.fontSize = tituloSize + 'px');
+
+// ========== ESPAÇAMENTOS AVANÇADOS E POSIÇÃO DA FOTO ==========
+function applyPhotoPosition() {
+  const topVal = localStorage.getItem('photoMarginTop') || 0;
+  const bottomVal = localStorage.getItem('photoMarginBottom') || 24;
+  const leftVal = localStorage.getItem('photoMarginLeft') || 0;
+  const rightVal = localStorage.getItem('photoMarginRight') || 0;
+  const photo = document.querySelector('.template-3 .offshore-photo');
+  if(photo) {
+    photo.style.marginTop = topVal + 'px';
+    photo.style.marginBottom = bottomVal + 'px';
+    photo.style.marginLeft = leftVal + 'px';
+    photo.style.marginRight = rightVal + 'px';
   }
-  document.getElementById('nomeSizeSlider') && (document.getElementById('nomeSizeSlider').value = nomeSize);
-  document.getElementById('cargoSizeSlider') && (document.getElementById('cargoSizeSlider').value = cargoSize);
-  document.getElementById('tituloSizeSlider') && (document.getElementById('tituloSizeSlider').value = tituloSize);
-  document.getElementById('textoSizeSlider') && (document.getElementById('textoSizeSlider').value = textSize);
-  document.getElementById('nomeSizeValue') && (document.getElementById('nomeSizeValue').innerText = nomeSize);
-  document.getElementById('cargoSizeValue') && (document.getElementById('cargoSizeValue').innerText = cargoSize);
-  document.getElementById('tituloSizeValue') && (document.getElementById('tituloSizeValue').innerText = tituloSize);
-  document.getElementById('textoSizeValue') && (document.getElementById('textoSizeValue').innerText = textSize);
 }
-function resetStyles(){ localStorage.removeItem('currFontFamily'); localStorage.removeItem('nomeSize'); localStorage.removeItem('cargoSize'); localStorage.removeItem('tituloSize'); localStorage.removeItem('textoSize'); applyFontStyles(); renderResume(); }
-function enableInlineEditing() {}
-function disableInlineEditing() {}
+function applyAdvancedSpacing() {
+  const margin = localStorage.getItem('advMargin') || 0;
+  const sectionGap = localStorage.getItem('advSectionGap') || 28;
+  const sidebarPadX = localStorage.getItem('sidebarPadX') || 32;
+  const sidebarPadY = localStorage.getItem('sidebarPadY') || 40;
+  const mainPad = localStorage.getItem('mainPad') || 40;
+  const listMargin = localStorage.getItem('listMargin') || 5;
+  const lineHeight = localStorage.getItem('lineHeight') || 1.5;
+  const contactGap = localStorage.getItem('contactGap') || 16;
+  
+  const r = document.querySelector('.resume');
+  if(r) r.style.padding = margin + 'px';
+  document.querySelectorAll('.section, .section-box').forEach(el => el.style.marginBottom = sectionGap + 'px');
+  const sidebar = document.querySelector('.template-3 .offshore-sidebar');
+  if(sidebar) sidebar.style.padding = `${sidebarPadY}px ${sidebarPadX}px`;
+  const main = document.querySelector('.template-3 .offshore-main');
+  if(main) main.style.padding = mainPad + 'px';
+  document.querySelectorAll('.section li, .section-box li, .side-info li').forEach(el => el.style.marginBottom = listMargin + 'px');
+  document.querySelectorAll('.section p, .section-box p, .side-info p').forEach(el => el.style.marginBottom = listMargin + 'px');
+  document.querySelectorAll('.section p, .section-box p, .side-info p, .section li, .section-box li, .side-info li, .side-info, .contact span').forEach(el => el.style.lineHeight = lineHeight);
+  const contactDiv = document.querySelector('.contact');
+  if(contactDiv) contactDiv.style.gap = contactGap + 'px';
+  applyPhotoPosition();
+}
+function resetAdvancedSpacing() {
+  localStorage.removeItem('advMargin'); localStorage.removeItem('advSectionGap'); localStorage.removeItem('sidebarPadX'); localStorage.removeItem('sidebarPadY');
+  localStorage.removeItem('mainPad'); localStorage.removeItem('listMargin'); localStorage.removeItem('lineHeight'); localStorage.removeItem('contactGap');
+  localStorage.removeItem('photoMarginTop'); localStorage.removeItem('photoMarginBottom'); localStorage.removeItem('photoMarginLeft'); localStorage.removeItem('photoMarginRight');
+  const r = document.querySelector('.resume'); if(r) r.style.padding = '';
+  document.querySelectorAll('.section, .section-box').forEach(el => el.style.marginBottom = '');
+  const sidebar = document.querySelector('.template-3 .offshore-sidebar'); if(sidebar) sidebar.style.padding = '';
+  const main = document.querySelector('.template-3 .offshore-main'); if(main) main.style.padding = '';
+  document.querySelectorAll('.section li, .section-box li, .side-info li').forEach(el => el.style.marginBottom = '');
+  document.querySelectorAll('.section p, .section-box p, .side-info p').forEach(el => el.style.marginBottom = '');
+  document.querySelectorAll('.section p, .section-box p, .side-info p, .section li, .section-box li, .side-info li, .side-info, .contact span').forEach(el => el.style.lineHeight = '');
+  const contactDiv = document.querySelector('.contact'); if(contactDiv) contactDiv.style.gap = '';
+  document.getElementById('advMarginSlider').value = 0; document.getElementById('advSectionSlider').value = 28;
+  document.getElementById('sidebarPaddingXSlider').value = 32; document.getElementById('sidebarPaddingYSlider').value = 40;
+  document.getElementById('mainPaddingSlider').value = 40; document.getElementById('listMarginSlider').value = 5;
+  document.getElementById('lineHeightSlider').value = 1.5; document.getElementById('contactGapSlider').value = 16;
+  document.getElementById('photoMarginTopSlider').value = 0; document.getElementById('photoMarginBottomSlider').value = 24;
+  document.getElementById('photoMarginLeftSlider').value = 0; document.getElementById('photoMarginRightSlider').value = 0;
+  updateAdvancedSpacingDisplay();
+  applyAdvancedSpacing(); renderResume();
+}
+function updateAdvancedSpacingDisplay() {
+  document.getElementById('advMarginValue').innerText = document.getElementById('advMarginSlider').value;
+  document.getElementById('advSectionValue').innerText = document.getElementById('advSectionSlider').value;
+  document.getElementById('sidebarPaddingX').innerText = document.getElementById('sidebarPaddingXSlider').value;
+  document.getElementById('sidebarPaddingY').innerText = document.getElementById('sidebarPaddingYSlider').value;
+  document.getElementById('mainPaddingValue').innerText = document.getElementById('mainPaddingSlider').value;
+  document.getElementById('listMarginValue').innerText = document.getElementById('listMarginSlider').value;
+  document.getElementById('lineHeightValue').innerText = document.getElementById('lineHeightSlider').value;
+  document.getElementById('contactGapValue').innerText = document.getElementById('contactGapSlider').value;
+  document.getElementById('photoMarginTopValue').innerText = document.getElementById('photoMarginTopSlider').value;
+  document.getElementById('photoMarginBottomValue').innerText = document.getElementById('photoMarginBottomSlider').value;
+  document.getElementById('photoMarginLeftValue').innerText = document.getElementById('photoMarginLeftSlider').value;
+  document.getElementById('photoMarginRightValue').innerText = document.getElementById('photoMarginRightSlider').value;
+}
 
 // ========== CONTROLE DE POSIÇÃO DAS HABILIDADES ==========
 const habilidadesLateralCheck = document.getElementById('habilidadesLateral');
@@ -727,7 +891,7 @@ if (habilidadesLateralCheck) {
   });
 }
 
-// ========== CONTROLE DE EXIBIÇÃO DA FOTO NO MODELO 3 ==========
+// ========== CONTROLE DE EXIBIÇÃO DA FOTO ==========
 const mostrarFotoCheck = document.getElementById('mostrarFotoModelo3');
 let mostrarFoto = true;
 function carregarPreferenciaFoto() {
@@ -752,6 +916,7 @@ if (mostrarFotoCheck) {
 const habilitarSecaoLateralCheck = document.getElementById('habilitarSecaoLateral');
 const tituloSecaoLateral = document.getElementById('tituloSecaoLateral');
 const conteudoSecaoLateral = document.getElementById('conteudoSecaoLateral');
+const secaoLateralFields = document.getElementById('secaoLateralFields');
 let secaoLateralAtiva = false;
 function carregarPreferenciaSecaoLateral() {
   const savedAtiva = localStorage.getItem('secaoLateralAtiva');
@@ -762,6 +927,7 @@ function carregarPreferenciaSecaoLateral() {
   const savedConteudo = localStorage.getItem('secaoLateralConteudo') || '';
   if (tituloSecaoLateral) tituloSecaoLateral.value = savedTitulo;
   if (conteudoSecaoLateral) conteudoSecaoLateral.value = savedConteudo;
+  if (secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none';
 }
 function salvarPreferenciaSecaoLateral() {
   localStorage.setItem('secaoLateralAtiva', secaoLateralAtiva);
@@ -771,6 +937,7 @@ function salvarPreferenciaSecaoLateral() {
 if (habilitarSecaoLateralCheck) {
   habilitarSecaoLateralCheck.addEventListener('change', (e) => {
     secaoLateralAtiva = e.target.checked;
+    if (secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none';
     salvarPreferenciaSecaoLateral();
     renderResume();
   });
@@ -780,7 +947,7 @@ if (tituloSecaoLateral && conteudoSecaoLateral) {
   conteudoSecaoLateral.addEventListener('input', () => { salvarPreferenciaSecaoLateral(); renderResume(); });
 }
 
-// ========== RENDERIZAÇÃO PRINCIPAL (COM AJUSTE PARA HABILIDADES, FOTO E SEÇÃO LATERAL) ==========
+// ========== RENDERIZAÇÃO PRINCIPAL ==========
 function renderResume(){
   const d = getData();
   document.getElementById('fotoGroup').style.display = currentTemplate===3 ? 'block' : 'none';
@@ -788,7 +955,6 @@ function renderResume(){
   const tE = inputs.tituloExperiencia.value, tF = inputs.tituloFormacao.value, tC = inputs.tituloCursos.value, tH = inputs.tituloHabilidades.value;
   const objetivoPar = formatContent(d.objetivo);
   
-  // Constrói a lista de seções (para templates 1 e 2 e parte do 3)
   let sectionsHtml = '';
   for(let sec of sectionsOrder) {
     if(sec.type === 'predefined') {
@@ -807,9 +973,11 @@ function renderResume(){
   const mostrarLinkedin = document.getElementById('mostrarLinkedin').checked && d.linkedin.trim() !== '';
   
   if(currentTemplate === 1){
-    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact"><span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span><span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>${mostrarLinkedin ? `<span><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : ''}<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span></div></div><div class="resume-body">${sectionsHtml}</div>`;
+    const linkedinSpan = mostrarLinkedin ? `<span class="linkedin-span"><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : '';
+    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact"><span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span><span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>${linkedinSpan}<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span></div></div><div class="resume-body">${sectionsHtml}</div>`;
   } else if(currentTemplate === 2){
-    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)}${mostrarLinkedin ? ` &nbsp; <i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}` : ''} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
+    const linkedinPart = mostrarLinkedin ? `<span class="linkedin-span"> &nbsp; <i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : '';
+    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)}${linkedinPart} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
   } else {
     // MODELO 3
     let mainSections = '';
@@ -825,22 +993,43 @@ function renderResume(){
         if(cs) mainSections += `<div class="section-box"><h3>${escapeHtml(cs.title)}</h3>${formatContent(cs.content)}</div>`;
       }
     }
-    let contactHtml = `📞 ${escapeHtml(d.telefone)}<br>✉ ${escapeHtml(d.email)}`;
-    if(mostrarLinkedin) contactHtml += `<br><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}`;
-    contactHtml += `<br>📍 ${escapeHtml(d.cidade)}`;
+    
+    // Contatos formatados com ícones alinhados
+    let contactHtml = `
+      <div class="contact-item">
+        <span class="contact-icon">📞</span>
+        <span class="contact-text">${escapeHtml(d.telefone)}</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">✉</span>
+        <span class="contact-text">${escapeHtml(d.email)}</span>
+      </div>
+    `;
+    if(mostrarLinkedin) {
+      contactHtml += `
+        <div class="linkedin-text">
+          <i class="fab fa-linkedin"></i>
+          <span>${escapeHtml(d.linkedin)}</span>
+        </div>
+      `;
+    }
+    contactHtml += `
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <span class="contact-text">${escapeHtml(d.cidade)}</span>
+      </div>
+    `;
     
     let sidebarHabilidades = '';
     if (habilidadesNoLateral && !hiddenSections.hab) {
       sidebarHabilidades = `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>`;
     }
     
-    // Seção lateral adicional (se ativa)
     let secaoLateralHtml = '';
     if (secaoLateralAtiva && tituloSecaoLateral.value.trim() !== '') {
       secaoLateralHtml = `<div class="side-title">${escapeHtml(tituloSecaoLateral.value)}</div><div class="side-info">${formatContent(conteudoSecaoLateral.value)}</div>`;
     }
     
-    // Controle da foto
     const fotoHtml = (fotoBase64 && mostrarFoto) ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : '';
     
     html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${sidebarHabilidades}${secaoLateralHtml}</div><div class="offshore-main">${mainSections}</div></div>`;
@@ -851,12 +1040,14 @@ function renderResume(){
   applyCustomSpacing(); 
   applyFontStyles();
   applyJustify();
+  applyAdvancedSpacing();
   if(currentTemplate === 3) { 
     const img = document.querySelector('.offshore-photo'); 
     if(img && !img.hasAttribute('data-click')){ 
       img.setAttribute('data-click','1'); 
       img.addEventListener('click',()=>document.getElementById('foto').click()); 
     } 
+    applyPhotoPosition();
   }
 }
 
@@ -875,24 +1066,27 @@ function carregarDadosLocal(){
       if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
       localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
     }
-    // Carregar dados da seção lateral
     if(data.secaoLateralAtiva !== undefined) {
       secaoLateralAtiva = data.secaoLateralAtiva;
       if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
+      if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none';
     }
     if(data.secaoLateralTitulo !== undefined && tituloSecaoLateral) tituloSecaoLateral.value = data.secaoLateralTitulo;
     if(data.secaoLateralConteudo !== undefined && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secaoLateralConteudo;
+    if(data.photoMarginTop) localStorage.setItem('photoMarginTop', data.photoMarginTop);
+    if(data.photoMarginBottom) localStorage.setItem('photoMarginBottom', data.photoMarginBottom);
+    if(data.photoMarginLeft) localStorage.setItem('photoMarginLeft', data.photoMarginLeft);
+    if(data.photoMarginRight) localStorage.setItem('photoMarginRight', data.photoMarginRight);
     renderResume(); 
   } 
 }
 function limparDados(){ 
   const campos=['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','linkedin']; 
   campos.forEach(id=>{ if(inputs[id]) inputs[id].value=''; }); 
-  // Limpar também seção lateral
   if(tituloSecaoLateral) tituloSecaoLateral.value = '';
   if(conteudoSecaoLateral) conteudoSecaoLateral.value = '';
-  secaoLateralAtiva = false;
-  if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = false;
+  secaoLateralAtiva = false; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = false;
+  if(secaoLateralFields) secaoLateralFields.style.display = 'none';
   renderResume(); 
 }
 function aplicarCor(nome){ if(!colorThemes[nome]) return; currentColor=nome; const r=document.documentElement.style, t=colorThemes[nome]; r.setProperty('--t1-bg-start',t.t1.start); r.setProperty('--t1-bg-end',t.t1.end); r.setProperty('--t1-text',t.t1.text); r.setProperty('--t1-accent',t.t1.accent); r.setProperty('--t3-bg-start',t.t3.start); r.setProperty('--t3-bg-end',t.t3.end); r.setProperty('--t3-text',t.t3.text); r.setProperty('--t3-accent',t.t3.accent); r.setProperty('--t3-border',t.t3.border); renderResume(); }
@@ -901,69 +1095,88 @@ function aplicarCor(nome){ if(!colorThemes[nome]) return; currentColor=nome; con
 const justifyBtn = document.getElementById('justifyBtn');
 let isJustified = localStorage.getItem('currJustify') === 'true';
 function applyJustify() {
-  if (isJustified) {
-    resumeDiv.classList.add('text-justify');
-    if (justifyBtn) justifyBtn.classList.add('active');
-  } else {
-    resumeDiv.classList.remove('text-justify');
-    if (justifyBtn) justifyBtn.classList.remove('active');
-  }
+  if (isJustified) { resumeDiv.classList.add('text-justify'); if (justifyBtn) justifyBtn.classList.add('active'); } 
+  else { resumeDiv.classList.remove('text-justify'); if (justifyBtn) justifyBtn.classList.remove('active'); }
   localStorage.setItem('currJustify', isJustified);
 }
-if (justifyBtn) {
-  justifyBtn.addEventListener('click', () => {
-    isJustified = !isJustified;
-    applyJustify();
-  });
+if (justifyBtn) justifyBtn.addEventListener('click', () => { isJustified = !isJustified; applyJustify(); });
+
+// ========== ESPAÇAMENTOS BÁSICOS ==========
+function applyCustomSpacing(){ const m=localStorage.getItem('currMargin')||0, s=localStorage.getItem('currSectionMargin')||28; const r=document.querySelector('.resume'); if(r) r.style.padding=m+'px'; document.querySelectorAll('.section, .section-box').forEach(el=>el.style.marginBottom=s+'px'); }
+document.getElementById('marginSlider').oninput=()=>{ localStorage.setItem('currMargin',document.getElementById('marginSlider').value); applyCustomSpacing(); };
+document.getElementById('sectionSlider').oninput=()=>{ localStorage.setItem('currSectionMargin',document.getElementById('sectionSlider').value); applyCustomSpacing(); };
+document.getElementById('resetSpacing').onclick=()=>{ localStorage.removeItem('currMargin'); localStorage.removeItem('currSectionMargin'); applyCustomSpacing(); };
+
+// ========== ESTILOS DE FONTE ==========
+function applyFontStyles(){ 
+  const f = localStorage.getItem('currFontFamily') || 'Inter';
+  const nomeSize = localStorage.getItem('nomeSize') || '32';
+  const cargoSize = localStorage.getItem('cargoSize') || '18';
+  const tituloSize = localStorage.getItem('tituloSize') || '22';
+  const textSize = localStorage.getItem('textoSize') || '14';
+  const r = document.getElementById('resume'); 
+  if(r){ 
+    r.style.fontFamily = f; r.style.fontSize = textSize + 'px'; 
+    const nomeElem = r.querySelector('.resume-name, .offshore-name'); if(nomeElem) nomeElem.style.fontSize = nomeSize + 'px';
+    const cargoElem = r.querySelector('.resume-role, .offshore-role'); if(cargoElem) cargoElem.style.fontSize = cargoSize + 'px';
+    const titulos = r.querySelectorAll('.section h3, .section-box h3, .side-title'); titulos.forEach(el => el.style.fontSize = tituloSize + 'px');
+  }
+  document.getElementById('nomeSizeSlider') && (document.getElementById('nomeSizeSlider').value = nomeSize);
+  document.getElementById('cargoSizeSlider') && (document.getElementById('cargoSizeSlider').value = cargoSize);
+  document.getElementById('tituloSizeSlider') && (document.getElementById('tituloSizeSlider').value = tituloSize);
+  document.getElementById('textoSizeSlider') && (document.getElementById('textoSizeSlider').value = textSize);
+  document.getElementById('nomeSizeValue') && (document.getElementById('nomeSizeValue').innerText = nomeSize);
+  document.getElementById('cargoSizeValue') && (document.getElementById('cargoSizeValue').innerText = cargoSize);
+  document.getElementById('tituloSizeValue') && (document.getElementById('tituloSizeValue').innerText = tituloSize);
+  document.getElementById('textoSizeValue') && (document.getElementById('textoSizeValue').innerText = textSize);
 }
+function resetStyles(){ localStorage.removeItem('currFontFamily'); localStorage.removeItem('nomeSize'); localStorage.removeItem('cargoSize'); localStorage.removeItem('tituloSize'); localStorage.removeItem('textoSize'); applyFontStyles(); renderResume(); }
+document.getElementById('fontFamilySelect').onchange=e=>{ localStorage.setItem('currFontFamily',e.target.value); applyFontStyles(); };
+document.getElementById('nomeSizeSlider').oninput=e=>{ localStorage.setItem('nomeSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('cargoSizeSlider').oninput=e=>{ localStorage.setItem('cargoSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('tituloSizeSlider').oninput=e=>{ localStorage.setItem('tituloSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('textoSizeSlider').oninput=e=>{ localStorage.setItem('textoSize',e.target.value); applyFontStyles(); renderResume(); };
+document.getElementById('resetStyles').addEventListener('click',resetStyles);
 
 // ========== PDF ==========
-function gerarPDF() {
-  const originalTitle = document.title;
-  document.title = '';
-  window.print();
-  setTimeout(() => { document.title = originalTitle; }, 500);
-}
+function gerarPDF() { const originalTitle = document.title; document.title = ''; window.print(); setTimeout(() => { document.title = originalTitle; }, 500); }
 document.getElementById('btnGerarPDF').addEventListener('click', gerarPDF);
 
 // ========== SALVAR LOCAL ==========
 document.getElementById('btnSalvarLocal').addEventListener('click', () => { 
-  const dados = {}; 
-  Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
-  dados.__color = currentColor; 
-  dados.template = currentTemplate; 
-  dados.foto_base64 = fotoBase64; 
-  dados.mostrarLinkedin = document.getElementById('mostrarLinkedin').checked;
-  dados.mostrarFoto = mostrarFoto;
-  dados.secaoLateralAtiva = secaoLateralAtiva;
-  dados.secaoLateralTitulo = tituloSecaoLateral ? tituloSecaoLateral.value : '';
-  dados.secaoLateralConteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
-  localStorage.setItem('curriculoPremium', JSON.stringify(dados)); 
-  alert('✅ Currículo salvo localmente!'); 
+  const dados = {}; Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); dados.__color = currentColor; dados.template = currentTemplate; dados.foto_base64 = fotoBase64; dados.mostrarLinkedin = document.getElementById('mostrarLinkedin').checked; dados.mostrarFoto = mostrarFoto; dados.secaoLateralAtiva = secaoLateralAtiva; dados.secaoLateralTitulo = tituloSecaoLateral ? tituloSecaoLateral.value : ''; dados.secaoLateralConteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
+  dados.photoMarginTop = localStorage.getItem('photoMarginTop') || 0;
+  dados.photoMarginBottom = localStorage.getItem('photoMarginBottom') || 24;
+  dados.photoMarginLeft = localStorage.getItem('photoMarginLeft') || 0;
+  dados.photoMarginRight = localStorage.getItem('photoMarginRight') || 0;
+  localStorage.setItem('curriculoPremium', JSON.stringify(dados)); alert('✅ Currículo salvo localmente!'); 
 });
-// ========== SALVAR NA NUVEM ==========
+
+// ========== SALVAR NA NUVEM (SEM OS CAMPOS DE FOTO MARGIN) ==========
 document.getElementById('btnSalvarNuvem').addEventListener('click', async () => { 
   const dados = {}; 
   Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
   dados.cor = currentColor; 
   dados.template = currentTemplate; 
   dados.foto_base64 = fotoBase64; 
-  dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked;
-  dados.linkedin = inputs.linkedin.value;
-  dados.mostrar_foto = mostrarFoto;
-  dados.secao_lateral_ativa = secaoLateralAtiva;
-  dados.secao_lateral_titulo = tituloSecaoLateral ? tituloSecaoLateral.value : '';
+  dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked; 
+  dados.linkedin = inputs.linkedin.value; 
+  dados.mostrar_foto = mostrarFoto; 
+  dados.secao_lateral_ativa = secaoLateralAtiva; 
+  dados.secao_lateral_titulo = tituloSecaoLateral ? tituloSecaoLateral.value : ''; 
   dados.secao_lateral_conteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
+  // NÃO enviamos photo_margin_* para o Supabase para evitar erro de coluna
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
   const { error } = await sup.from('curriculos').insert([dadosLower]); 
   alert(error ? '❌ Erro: '+error.message : '✅ Salvo na nuvem!'); 
 });
+
 document.getElementById('btnLimparCampos').addEventListener('click', limparDados);
 document.getElementById('desfazerBtn').addEventListener('click', () => renderResume());
 
-// ========== MODAL LEADS E DEMAIS FUNÇÕES ==========
+// ========== MODAL LEADS ==========
 const modal = document.getElementById('modalCadastros');
 const btnVer = document.getElementById('btnVerCadastros');
 const fecharModal = document.getElementById('fecharModal');
@@ -1023,17 +1236,14 @@ window.carregarCurriculoDoLocalStorage = function() {
   if(data.template) trocarTemplate(data.template);
   if(data.foto_base64) fotoBase64 = data.foto_base64;
   if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin;
-  if(data.mostrarFoto !== undefined) {
-    mostrarFoto = data.mostrarFoto;
-    if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
-    localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
-  }
-  if(data.secaoLateralAtiva !== undefined) {
-    secaoLateralAtiva = data.secaoLateralAtiva;
-    if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
-  }
+  if(data.mostrarFoto !== undefined) { mostrarFoto = data.mostrarFoto; if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto; localStorage.setItem('mostrarFotoModelo3', mostrarFoto); }
+  if(data.secaoLateralAtiva !== undefined) { secaoLateralAtiva = data.secaoLateralAtiva; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva; if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none'; }
   if(data.secaoLateralTitulo !== undefined && tituloSecaoLateral) tituloSecaoLateral.value = data.secaoLateralTitulo;
   if(data.secaoLateralConteudo !== undefined && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secaoLateralConteudo;
+  if(data.photoMarginTop) localStorage.setItem('photoMarginTop', data.photoMarginTop);
+  if(data.photoMarginBottom) localStorage.setItem('photoMarginBottom', data.photoMarginBottom);
+  if(data.photoMarginLeft) localStorage.setItem('photoMarginLeft', data.photoMarginLeft);
+  if(data.photoMarginRight) localStorage.setItem('photoMarginRight', data.photoMarginRight);
   renderResume();
   modal.classList.remove('show');
   alert('Currículo local carregado!');
@@ -1076,17 +1286,11 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.foto_base64) fotoBase64 = data.foto_base64;
       if(data.mostrar_linkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrar_linkedin;
       if(data.linkedin) inputs.linkedin.value = data.linkedin;
-      if(data.mostrar_foto !== undefined) {
-        mostrarFoto = data.mostrar_foto;
-        if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
-        localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
-      }
-      if(data.secao_lateral_ativa !== undefined) {
-        secaoLateralAtiva = data.secao_lateral_ativa;
-        if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
-      }
+      if(data.mostrar_foto !== undefined) { mostrarFoto = data.mostrar_foto; if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto; localStorage.setItem('mostrarFotoModelo3', mostrarFoto); }
+      if(data.secao_lateral_ativa !== undefined) { secaoLateralAtiva = data.secao_lateral_ativa; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva; if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none'; }
       if(data.secao_lateral_titulo && tituloSecaoLateral) tituloSecaoLateral.value = data.secao_lateral_titulo;
       if(data.secao_lateral_conteudo && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secao_lateral_conteudo;
+      // Não carregamos photo_margin_* porque não estão na nuvem
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
@@ -1097,20 +1301,82 @@ async function carregarCurriculoDaNuvem(id) {
 // ========== BOTÕES ADICIONAIS ==========
 const editBtn = document.getElementById('editModeBtn');
 editBtn.addEventListener('click', () => { editMode = !editMode; if(editMode){ enableInlineEditing(); editBtn.classList.add('active'); } else { disableInlineEditing(); editBtn.classList.remove('active'); } });
+function enableInlineEditing() {}
+function disableInlineEditing() {}
+
 const spacingBtn = document.getElementById('spacingBtn'), spacingModalElem = document.getElementById('spacingModal'), closeSpacing = document.getElementById('closeSpacing');
 spacingBtn.onclick=()=>spacingModalElem.style.display='block'; closeSpacing.onclick=()=>spacingModalElem.style.display='none';
-document.getElementById('marginSlider').oninput=()=>{ localStorage.setItem('currMargin',document.getElementById('marginSlider').value); applyCustomSpacing(); };
-document.getElementById('sectionSlider').oninput=()=>{ localStorage.setItem('currSectionMargin',document.getElementById('sectionSlider').value); applyCustomSpacing(); };
-document.getElementById('resetSpacing').onclick=()=>{ localStorage.removeItem('currMargin'); localStorage.removeItem('currSectionMargin'); applyCustomSpacing(); };
+const advancedSpacingBtn = document.getElementById('advancedSpacingBtn'), advancedSpacingModal = document.getElementById('advancedSpacingModal'), closeAdvancedSpacing = document.getElementById('closeAdvancedSpacing');
+advancedSpacingBtn.onclick=()=>advancedSpacingModal.style.display='block'; closeAdvancedSpacing.onclick=()=>advancedSpacingModal.style.display='none';
 const styleBtn = document.getElementById('styleBtn'), styleModalElem = document.getElementById('styleModal'), closeStyle = document.getElementById('closeStyle');
 styleBtn.onclick=()=>styleModalElem.style.display='block'; closeStyle.onclick=()=>styleModalElem.style.display='none';
-document.getElementById('fontFamilySelect').onchange=e=>{ localStorage.setItem('currFontFamily',e.target.value); applyFontStyles(); };
-document.getElementById('nomeSizeSlider').oninput=e=>{ localStorage.setItem('nomeSize',e.target.value); applyFontStyles(); renderResume(); };
-document.getElementById('cargoSizeSlider').oninput=e=>{ localStorage.setItem('cargoSize',e.target.value); applyFontStyles(); renderResume(); };
-document.getElementById('tituloSizeSlider').oninput=e=>{ localStorage.setItem('tituloSize',e.target.value); applyFontStyles(); renderResume(); };
-document.getElementById('textoSizeSlider').oninput=e=>{ localStorage.setItem('textoSize',e.target.value); applyFontStyles(); renderResume(); };
-document.getElementById('resetStyles').addEventListener('click',resetStyles);
 document.getElementById('mobileViewBtn').addEventListener('click',()=>document.getElementById('resumeWrap').classList.toggle('mobile-preview'));
+
+// Sliders avançados e foto
+const advMarginSlider = document.getElementById('advMarginSlider');
+const advSectionSlider = document.getElementById('advSectionSlider');
+const sidebarPadXSlider = document.getElementById('sidebarPaddingXSlider');
+const sidebarPadYSlider = document.getElementById('sidebarPaddingYSlider');
+const mainPadSlider = document.getElementById('mainPaddingSlider');
+const listMarginSlider = document.getElementById('listMarginSlider');
+const lineHeightSlider = document.getElementById('lineHeightSlider');
+const contactGapSlider = document.getElementById('contactGapSlider');
+const photoMarginTopSlider = document.getElementById('photoMarginTopSlider');
+const photoMarginBottomSlider = document.getElementById('photoMarginBottomSlider');
+const photoMarginLeftSlider = document.getElementById('photoMarginLeftSlider');
+const photoMarginRightSlider = document.getElementById('photoMarginRightSlider');
+
+function updateAdvancedSpacing() {
+  localStorage.setItem('advMargin', advMarginSlider.value);
+  localStorage.setItem('advSectionGap', advSectionSlider.value);
+  localStorage.setItem('sidebarPadX', sidebarPadXSlider.value);
+  localStorage.setItem('sidebarPadY', sidebarPadYSlider.value);
+  localStorage.setItem('mainPad', mainPadSlider.value);
+  localStorage.setItem('listMargin', listMarginSlider.value);
+  localStorage.setItem('lineHeight', lineHeightSlider.value);
+  localStorage.setItem('contactGap', contactGapSlider.value);
+  localStorage.setItem('photoMarginTop', photoMarginTopSlider.value);
+  localStorage.setItem('photoMarginBottom', photoMarginBottomSlider.value);
+  localStorage.setItem('photoMarginLeft', photoMarginLeftSlider.value);
+  localStorage.setItem('photoMarginRight', photoMarginRightSlider.value);
+  updateAdvancedSpacingDisplay();
+  applyAdvancedSpacing();
+  renderResume();
+}
+advMarginSlider.oninput = updateAdvancedSpacing;
+advSectionSlider.oninput = updateAdvancedSpacing;
+sidebarPadXSlider.oninput = updateAdvancedSpacing;
+sidebarPadYSlider.oninput = updateAdvancedSpacing;
+mainPadSlider.oninput = updateAdvancedSpacing;
+listMarginSlider.oninput = updateAdvancedSpacing;
+lineHeightSlider.oninput = updateAdvancedSpacing;
+contactGapSlider.oninput = updateAdvancedSpacing;
+photoMarginTopSlider.oninput = updateAdvancedSpacing;
+photoMarginBottomSlider.oninput = updateAdvancedSpacing;
+photoMarginLeftSlider.oninput = updateAdvancedSpacing;
+photoMarginRightSlider.oninput = updateAdvancedSpacing;
+document.getElementById('resetAdvancedSpacing').addEventListener('click', resetAdvancedSpacing);
+document.getElementById('resetPhotoPosition').addEventListener('click', () => {
+  photoMarginTopSlider.value = 0; photoMarginBottomSlider.value = 24; photoMarginLeftSlider.value = 0; photoMarginRightSlider.value = 0;
+  updateAdvancedSpacing();
+});
+function loadAdvancedSpacingSliders() {
+  advMarginSlider.value = localStorage.getItem('advMargin') || 0;
+  advSectionSlider.value = localStorage.getItem('advSectionGap') || 28;
+  sidebarPadXSlider.value = localStorage.getItem('sidebarPadX') || 32;
+  sidebarPadYSlider.value = localStorage.getItem('sidebarPadY') || 40;
+  mainPadSlider.value = localStorage.getItem('mainPad') || 40;
+  listMarginSlider.value = localStorage.getItem('listMargin') || 5;
+  lineHeightSlider.value = localStorage.getItem('lineHeight') || 1.5;
+  contactGapSlider.value = localStorage.getItem('contactGap') || 16;
+  photoMarginTopSlider.value = localStorage.getItem('photoMarginTop') || 0;
+  photoMarginBottomSlider.value = localStorage.getItem('photoMarginBottom') || 24;
+  photoMarginLeftSlider.value = localStorage.getItem('photoMarginLeft') || 0;
+  photoMarginRightSlider.value = localStorage.getItem('photoMarginRight') || 0;
+  updateAdvancedSpacingDisplay();
+}
+loadAdvancedSpacingSliders();
+
 // SEÇÕES
 const manageBtn = document.getElementById('manageSectionsBtn'), sectionsModalElem = document.getElementById('sectionsModal'), closeSectionsModal = document.getElementById('closeSectionsModal');
 const addSectionBtn = document.getElementById('addSectionBtn'), newSectionTitleInput = document.getElementById('newSectionTitle');
@@ -1118,6 +1384,7 @@ manageBtn.onclick=()=>{ renderSectionsModal(); sectionsModalElem.classList.add('
 closeSectionsModal.onclick=()=>sectionsModalElem.classList.remove('show');
 addSectionBtn.onclick=()=>{ const title=newSectionTitleInput.value.trim(); if(title) addCustomSection(title); newSectionTitleInput.value=''; };
 document.getElementById('resetOrderBtn').addEventListener('click', () => { if(confirm('Restaurar ordem padrão?')) { sectionsOrder = predefinedSections.map(s=>({id:s.id,type:'predefined',title:s.title})); saveSectionsOrder(); renderSectionsModal(); renderResume(); } });
+
 // EVENTOS INICIAIS
 document.querySelectorAll('.color-swatch').forEach(s=>s.addEventListener('click',()=>aplicarCor(s.dataset.color)));
 document.getElementById('foto').addEventListener('change',e=>{ const f=e.target.files[0]; if(f){ const reader=new FileReader(); reader.onload=ev=>{ fotoBase64=ev.target.result; renderResume(); }; reader.readAsDataURL(f); } });
