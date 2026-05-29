@@ -384,7 +384,7 @@ button:hover{ transform:translateY(-2px); }
       </div>
       <div class="input-group" id="fotoGroup"><label>Foto do candidato</label><input type="file" id="foto" accept="image/*"></div>
       
-      <!-- Controle de posição das habilidades no Modelo 3 -->
+      <!-- Controles do Modelo 3 -->
       <div class="input-group">
         <label style="display: flex; align-items: center; gap: 8px;">
           <input type="checkbox" id="habilidadesLateral" checked> Habilidades na lateral (Modelo 3)
@@ -392,12 +392,23 @@ button:hover{ transform:translateY(-2px); }
         <small style="font-size: 0.7rem;">Desmarque para mover as habilidades para a coluna principal</small>
       </div>
       
-      <!-- NOVO: Controle para exibir ou não a foto no Modelo 3 -->
       <div class="input-group">
         <label style="display: flex; align-items: center; gap: 8px;">
           <input type="checkbox" id="mostrarFotoModelo3" checked> Mostrar foto (Modelo 3)
         </label>
         <small style="font-size: 0.7rem;">Desmarque para ocultar a foto no currículo (apenas Modelo 3)</small>
+      </div>
+      
+      <!-- Nova seção lateral customizável -->
+      <div class="input-group">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="habilitarSecaoLateral"> Ativar seção adicional na lateral (Modelo 3)
+        </label>
+        <label>Título da seção lateral</label>
+        <input id="tituloSecaoLateral" placeholder="Ex: Idiomas, Certificações, etc.">
+        <label>Conteúdo da seção lateral</label>
+        <textarea id="conteudoSecaoLateral" placeholder="Digite o conteúdo..."></textarea>
+        <small style="font-size: 0.7rem;">Esta seção aparecerá na sidebar abaixo das habilidades (se ativa)</small>
       </div>
       
       <div class="input-group"><label>Título Experiência</label><input id="tituloExperiencia" value="EXPERIÊNCIA PROFISSIONAL"></div>
@@ -737,7 +748,39 @@ if (mostrarFotoCheck) {
   });
 }
 
-// ========== RENDERIZAÇÃO PRINCIPAL (COM AJUSTE PARA HABILIDADES E FOTO) ==========
+// ========== CONTROLE DA SEÇÃO LATERAL ADICIONAL ==========
+const habilitarSecaoLateralCheck = document.getElementById('habilitarSecaoLateral');
+const tituloSecaoLateral = document.getElementById('tituloSecaoLateral');
+const conteudoSecaoLateral = document.getElementById('conteudoSecaoLateral');
+let secaoLateralAtiva = false;
+function carregarPreferenciaSecaoLateral() {
+  const savedAtiva = localStorage.getItem('secaoLateralAtiva');
+  if (savedAtiva !== null) secaoLateralAtiva = savedAtiva === 'true';
+  else secaoLateralAtiva = false;
+  if (habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
+  const savedTitulo = localStorage.getItem('secaoLateralTitulo') || '';
+  const savedConteudo = localStorage.getItem('secaoLateralConteudo') || '';
+  if (tituloSecaoLateral) tituloSecaoLateral.value = savedTitulo;
+  if (conteudoSecaoLateral) conteudoSecaoLateral.value = savedConteudo;
+}
+function salvarPreferenciaSecaoLateral() {
+  localStorage.setItem('secaoLateralAtiva', secaoLateralAtiva);
+  localStorage.setItem('secaoLateralTitulo', tituloSecaoLateral.value);
+  localStorage.setItem('secaoLateralConteudo', conteudoSecaoLateral.value);
+}
+if (habilitarSecaoLateralCheck) {
+  habilitarSecaoLateralCheck.addEventListener('change', (e) => {
+    secaoLateralAtiva = e.target.checked;
+    salvarPreferenciaSecaoLateral();
+    renderResume();
+  });
+}
+if (tituloSecaoLateral && conteudoSecaoLateral) {
+  tituloSecaoLateral.addEventListener('input', () => { salvarPreferenciaSecaoLateral(); renderResume(); });
+  conteudoSecaoLateral.addEventListener('input', () => { salvarPreferenciaSecaoLateral(); renderResume(); });
+}
+
+// ========== RENDERIZAÇÃO PRINCIPAL (COM AJUSTE PARA HABILIDADES, FOTO E SEÇÃO LATERAL) ==========
 function renderResume(){
   const d = getData();
   document.getElementById('fotoGroup').style.display = currentTemplate===3 ? 'block' : 'none';
@@ -791,10 +834,16 @@ function renderResume(){
       sidebarHabilidades = `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>`;
     }
     
-    // Controle da foto: só exibe se houver foto E se a opção "mostrarFoto" estiver ativa
+    // Seção lateral adicional (se ativa)
+    let secaoLateralHtml = '';
+    if (secaoLateralAtiva && tituloSecaoLateral.value.trim() !== '') {
+      secaoLateralHtml = `<div class="side-title">${escapeHtml(tituloSecaoLateral.value)}</div><div class="side-info">${formatContent(conteudoSecaoLateral.value)}</div>`;
+    }
+    
+    // Controle da foto
     const fotoHtml = (fotoBase64 && mostrarFoto) ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : '';
     
-    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${sidebarHabilidades}</div><div class="offshore-main">${mainSections}</div></div>`;
+    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${sidebarHabilidades}${secaoLateralHtml}</div><div class="offshore-main">${mainSections}</div></div>`;
   }
   resumeDiv.className = `resume template-${currentTemplate}`;
   resumeDiv.innerHTML = html;
@@ -804,7 +853,6 @@ function renderResume(){
   applyJustify();
   if(currentTemplate === 3) { 
     const img = document.querySelector('.offshore-photo'); 
-    // Adiciona evento de clique apenas se a foto estiver sendo exibida (caso contrário, não há foto para clicar)
     if(img && !img.hasAttribute('data-click')){ 
       img.setAttribute('data-click','1'); 
       img.addEventListener('click',()=>document.getElementById('foto').click()); 
@@ -827,12 +875,24 @@ function carregarDadosLocal(){
       if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
       localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
     }
+    // Carregar dados da seção lateral
+    if(data.secaoLateralAtiva !== undefined) {
+      secaoLateralAtiva = data.secaoLateralAtiva;
+      if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
+    }
+    if(data.secaoLateralTitulo !== undefined && tituloSecaoLateral) tituloSecaoLateral.value = data.secaoLateralTitulo;
+    if(data.secaoLateralConteudo !== undefined && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secaoLateralConteudo;
     renderResume(); 
   } 
 }
 function limparDados(){ 
   const campos=['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','linkedin']; 
   campos.forEach(id=>{ if(inputs[id]) inputs[id].value=''; }); 
+  // Limpar também seção lateral
+  if(tituloSecaoLateral) tituloSecaoLateral.value = '';
+  if(conteudoSecaoLateral) conteudoSecaoLateral.value = '';
+  secaoLateralAtiva = false;
+  if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = false;
   renderResume(); 
 }
 function aplicarCor(nome){ if(!colorThemes[nome]) return; currentColor=nome; const r=document.documentElement.style, t=colorThemes[nome]; r.setProperty('--t1-bg-start',t.t1.start); r.setProperty('--t1-bg-end',t.t1.end); r.setProperty('--t1-text',t.t1.text); r.setProperty('--t1-accent',t.t1.accent); r.setProperty('--t3-bg-start',t.t3.start); r.setProperty('--t3-bg-end',t.t3.end); r.setProperty('--t3-text',t.t3.text); r.setProperty('--t3-accent',t.t3.accent); r.setProperty('--t3-border',t.t3.border); renderResume(); }
@@ -874,7 +934,10 @@ document.getElementById('btnSalvarLocal').addEventListener('click', () => {
   dados.template = currentTemplate; 
   dados.foto_base64 = fotoBase64; 
   dados.mostrarLinkedin = document.getElementById('mostrarLinkedin').checked;
-  dados.mostrarFoto = mostrarFoto; // salva preferência da foto
+  dados.mostrarFoto = mostrarFoto;
+  dados.secaoLateralAtiva = secaoLateralAtiva;
+  dados.secaoLateralTitulo = tituloSecaoLateral ? tituloSecaoLateral.value : '';
+  dados.secaoLateralConteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
   localStorage.setItem('curriculoPremium', JSON.stringify(dados)); 
   alert('✅ Currículo salvo localmente!'); 
 });
@@ -887,7 +950,10 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
   dados.foto_base64 = fotoBase64; 
   dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked;
   dados.linkedin = inputs.linkedin.value;
-  dados.mostrar_foto = mostrarFoto; // salva preferência da foto na nuvem
+  dados.mostrar_foto = mostrarFoto;
+  dados.secao_lateral_ativa = secaoLateralAtiva;
+  dados.secao_lateral_titulo = tituloSecaoLateral ? tituloSecaoLateral.value : '';
+  dados.secao_lateral_conteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
@@ -962,6 +1028,12 @@ window.carregarCurriculoDoLocalStorage = function() {
     if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
     localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
   }
+  if(data.secaoLateralAtiva !== undefined) {
+    secaoLateralAtiva = data.secaoLateralAtiva;
+    if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
+  }
+  if(data.secaoLateralTitulo !== undefined && tituloSecaoLateral) tituloSecaoLateral.value = data.secaoLateralTitulo;
+  if(data.secaoLateralConteudo !== undefined && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secaoLateralConteudo;
   renderResume();
   modal.classList.remove('show');
   alert('Currículo local carregado!');
@@ -1009,6 +1081,12 @@ async function carregarCurriculoDaNuvem(id) {
         if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
         localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
       }
+      if(data.secao_lateral_ativa !== undefined) {
+        secaoLateralAtiva = data.secao_lateral_ativa;
+        if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva;
+      }
+      if(data.secao_lateral_titulo && tituloSecaoLateral) tituloSecaoLateral.value = data.secao_lateral_titulo;
+      if(data.secao_lateral_conteudo && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secao_lateral_conteudo;
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
@@ -1050,6 +1128,7 @@ document.getElementById('mostrarLinkedin').addEventListener('change', renderResu
 carregarDadosLocal(); trocarTemplate(1); renderResume(); loadSectionsOrder(); renderCustomFieldsInForm();
 carregarPreferenciaHabilidades();
 carregarPreferenciaFoto();
+carregarPreferenciaSecaoLateral();
 applyJustify();
 </script>
 </body>
