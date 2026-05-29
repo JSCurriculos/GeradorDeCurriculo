@@ -101,10 +101,10 @@ button:hover{ transform:translateY(-2px); }
 .preview-area{ background:white; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; }
 .preview-header{ padding:20px 24px; border-bottom:1px solid #e8eef5; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
 .preview-header h2{ color:var(--royal); display: flex; align-items: center; gap: 8px; }
-.edit-mode-btn, .spacing-btn, .style-btn, .mobile-view-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--royal); padding: 4px 8px; border-radius: 30px; transition:0.2s; }
+.edit-mode-btn, .spacing-btn, .style-btn, .mobile-view-btn, .justify-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--royal); padding: 4px 8px; border-radius: 30px; transition:0.2s; }
 .edit-mode-btn { color: var(--gold); }
-.edit-mode-btn.active { background: var(--gold); color: #0f172a; }
-.spacing-btn:hover, .style-btn:hover, .mobile-view-btn:hover { background: #f3f7fc; }
+.edit-mode-btn.active, .justify-btn.active { background: var(--gold); color: #0f172a; }
+.spacing-btn:hover, .style-btn:hover, .mobile-view-btn:hover, .justify-btn:hover { background: #f3f7fc; }
 .template-selector{ display:flex; gap:8px; flex-wrap:wrap; }
 .temp-btn{ background:#f3f7fc; border:1px solid #d9e4ef; padding:6px 12px; border-radius:30px; font-size:.75rem; cursor:pointer; }
 .temp-btn.active{ background:var(--royal); color:white; }
@@ -114,6 +114,19 @@ button:hover{ transform:translateY(-2px); }
 .resume-wrap{ padding:18px; background:#eef3f9; overflow-x: auto; transition: max-width 0.3s; }
 .resume-wrap.mobile-preview{ max-width: 375px; margin: 0 auto; }
 .resume{ background:white; border-radius:18px; box-shadow:0 8px 25px rgba(0,0,0,.06); }
+
+/* JUSTIFICAR TEXTO */
+#resume.text-justify p,
+#resume.text-justify li,
+#resume.text-justify .section p,
+#resume.text-justify .section-box p,
+#resume.text-justify .side-info p,
+#resume.text-justify .side-info,
+#resume.text-justify .contact span,
+#resume.text-justify .offshore-main .section-box p,
+#resume.text-justify .offshore-sidebar .side-info {
+  text-align: justify;
+}
 
 /* TEMPLATES */
 .template-1 .resume-top{ background:linear-gradient(135deg,var(--t1-bg-start),var(--t1-bg-end)); color:var(--t1-text); padding:42px; }
@@ -132,15 +145,58 @@ button:hover{ transform:translateY(-2px); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-.template-3 .offshore-layout{ display:grid; grid-template-columns:300px 1fr; }
-.template-3 .offshore-sidebar{ background:linear-gradient(180deg,var(--t3-bg-start),var(--t3-bg-end)); color:var(--t3-text); padding:40px 28px; height:100%; }
-.template-3 .offshore-photo{ width:170px; height:170px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 24px; border:5px solid var(--t3-border); cursor:pointer; transition:0.2s; }
-.template-3 .offshore-photo:hover { opacity:0.8; }
-.template-3 .offshore-name{ font-size:1.8rem; font-weight:800; text-align:center; margin-bottom:10px; }
-.template-3 .offshore-role{ text-align:center; color:var(--t3-accent); margin-bottom:20px; }
-.template-3 .side-title{ margin-top:28px; margin-bottom:10px; color:var(--t3-accent); font-size:.74rem; }
-.template-3 .side-info{ line-height:1.8; font-size:.92rem; }
-.template-3 .offshore-main{ padding:40px; }
+/* MODELO 3 */
+.template-3 .offshore-layout { 
+  display: grid; 
+  grid-template-columns: 280px 1fr; 
+  align-items: stretch;
+  min-height: 100vh; 
+}
+.template-3 .offshore-sidebar { 
+  background: linear-gradient(180deg, var(--t3-bg-start), var(--t3-bg-end)); 
+  color: var(--t3-text); 
+  padding: 40px 28px; 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.template-3 .offshore-photo { 
+  width: 160px; 
+  height: 160px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  display: block; 
+  margin: 0 auto 24px; 
+  border: 4px solid var(--t3-border); 
+  cursor: pointer; 
+}
+.template-3 .offshore-photo:hover { opacity: 0.8; }
+.template-3 .offshore-name { 
+  font-size: 1.8rem; 
+  font-weight: 800; 
+  text-align: center; 
+  margin-bottom: 10px; 
+}
+.template-3 .offshore-role { 
+  text-align: center; 
+  color: var(--t3-accent); 
+  margin-bottom: 20px; 
+}
+.template-3 .side-title { 
+  margin-top: 28px; 
+  margin-bottom: 10px; 
+  color: var(--t3-accent); 
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+.template-3 .side-info { 
+  line-height: 1.6; 
+  font-size: 0.9rem; 
+}
+.template-3 .offshore-main { 
+  padding: 40px; 
+  background: white;
+}
 
 /* MODAIS */
 .sections-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center; }
@@ -173,21 +229,18 @@ button:hover{ transform:translateY(-2px); }
 .lista-item { background:#f8fafc; border-radius:16px; padding:14px 18px; margin-bottom:12px; border-left:4px solid var(--gold); }
 .btn-carregar { background:var(--gold); color:#1e293b; border:none; padding:6px 14px; border-radius:30px; margin-top:8px; font-size:0.75rem; cursor:pointer; }
 
-/* ========== IMPRESSÃO (PDF) – FLUXO CONTÍNUO COM QUEBRAS NATURAIS ========== */
+/* ========== IMPRESSÃO (PDF) ========== */
 @media print {
   @page {
     margin: 0;
     size: A4;
   }
-  /* Esconde todos os elementos do body usando visibility */
   body, body * {
     visibility: hidden;
   }
-  /* Torna apenas o currículo visível */
   #resume, #resume * {
     visibility: visible;
   }
-  /* Remove o espaço ocupado pelos outros elementos e posiciona o currículo */
   #resume {
     position: absolute;
     top: 0;
@@ -202,13 +255,29 @@ button:hover{ transform:translateY(-2px); }
     height: auto;
     overflow: visible;
   }
-  /* Mantém cores e quebras naturais */
+  .template-3 .offshore-layout {
+    min-height: 100vh !important;
+    height: auto !important;
+    grid-template-columns: 250px 1fr !important;
+    break-inside: avoid;
+  }
+  .template-3 .offshore-sidebar {
+    break-inside: avoid;
+    height: 100%;
+  }
+  .template-3 .offshore-main {
+    break-inside: auto;
+  }
+  .template-3 .offshore-photo {
+    max-width: 120px;
+    height: auto;
+    margin: 0 auto 15px;
+  }
   .resume-top, .offshore-sidebar, .section, .section-box,
   .template-2 .section, .template-1 .resume-top, .template-3 .offshore-sidebar {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
-  /* Contatos empilhados verticalmente */
   .contact {
     display: flex !important;
     flex-direction: column !important;
@@ -226,23 +295,11 @@ button:hover{ transform:translateY(-2px); }
     display: block;
     margin-bottom: 4px;
   }
-  .template-3 .offshore-sidebar .side-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .template-3 .offshore-photo {
-    max-width: 140px;
-    height: auto;
-    margin: 0 auto 15px;
-  }
-  /* Remove padding e margens extras */
   .resume-wrap {
     padding: 0 !important;
     background: white !important;
     margin: 0 !important;
   }
-  /* QUEBRAS NATURAIS – permite que o conteúdo quebre em qualquer lugar */
   .section, .section-box {
     break-inside: auto;
     page-break-inside: auto;
@@ -253,8 +310,9 @@ button:hover{ transform:translateY(-2px); }
   .dashboard { grid-template-columns: 1fr; }
   .form-card { position: relative; height: auto; margin-bottom: 20px; }
   .preview-header { flex-direction: column; align-items: stretch; }
-  .template-3 .offshore-layout { grid-template-columns: 1fr; }
-  .template-3 .offshore-sidebar { padding: 25px; }
+  .template-3 .offshore-layout { grid-template-columns: 1fr; min-height: auto; }
+  .template-3 .offshore-sidebar { text-align: center; padding: 30px 20px; }
+  .template-3 .offshore-photo { margin: 0 auto 20px; }
   .btn-group button { font-size: 0.7rem; padding: 6px 10px; }
 }
 </style>
@@ -325,10 +383,28 @@ button:hover{ transform:translateY(-2px); }
         <textarea id="habilidades" placeholder="Digite suas habilidades..."></textarea>
       </div>
       <div class="input-group" id="fotoGroup"><label>Foto do candidato</label><input type="file" id="foto" accept="image/*"></div>
+      
+      <!-- Controle de posição das habilidades no Modelo 3 -->
+      <div class="input-group">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="habilidadesLateral" checked> Habilidades na lateral (Modelo 3)
+        </label>
+        <small style="font-size: 0.7rem;">Desmarque para mover as habilidades para a coluna principal</small>
+      </div>
+      
+      <!-- NOVO: Controle para exibir ou não a foto no Modelo 3 -->
+      <div class="input-group">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="mostrarFotoModelo3" checked> Mostrar foto (Modelo 3)
+        </label>
+        <small style="font-size: 0.7rem;">Desmarque para ocultar a foto no currículo (apenas Modelo 3)</small>
+      </div>
+      
       <div class="input-group"><label>Título Experiência</label><input id="tituloExperiencia" value="EXPERIÊNCIA PROFISSIONAL"></div>
       <div class="input-group"><label>Título Formação</label><input id="tituloFormacao" value="FORMAÇÃO"></div>
       <div class="input-group"><label>Título Cursos</label><input id="tituloCursos" value="CURSOS E CERTIFICAÇÕES"></div>
       <div class="input-group"><label>Título Habilidades</label><input id="tituloHabilidades" value="HABILIDADES"></div>
+      
       <div id="customSectionsContainer"></div>
       <div class="btn-group">
         <button class="btn-gold" id="btnGerarPDF"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
@@ -350,6 +426,7 @@ button:hover{ transform:translateY(-2px); }
         <button id="editModeBtn" class="edit-mode-btn" title="Editar diretamente no currículo"><i class="fas fa-pencil-alt"></i></button>
         <button id="spacingBtn" class="spacing-btn" title="Ajustar espaçamento"><i class="fas fa-arrows-alt"></i></button>
         <button id="styleBtn" class="style-btn" title="Alterar fonte e tamanhos"><i class="fas fa-font"></i></button>
+        <button id="justifyBtn" class="justify-btn" title="Justificar texto"><i class="fas fa-align-justify"></i> Justificar</button>
         <button id="mobileViewBtn" class="mobile-view-btn" title="Visualização móvel"><i class="fas fa-mobile-alt"></i></button>
       </h2>
       <div>
@@ -617,12 +694,58 @@ function applyFontStyles(){
 function resetStyles(){ localStorage.removeItem('currFontFamily'); localStorage.removeItem('nomeSize'); localStorage.removeItem('cargoSize'); localStorage.removeItem('tituloSize'); localStorage.removeItem('textoSize'); applyFontStyles(); renderResume(); }
 function enableInlineEditing() {}
 function disableInlineEditing() {}
+
+// ========== CONTROLE DE POSIÇÃO DAS HABILIDADES ==========
+const habilidadesLateralCheck = document.getElementById('habilidadesLateral');
+let habilidadesNoLateral = true;
+function carregarPreferenciaHabilidades() {
+  const saved = localStorage.getItem('habilidadesLateral');
+  if (saved !== null) {
+    habilidadesNoLateral = saved === 'true';
+    if (habilidadesLateralCheck) habilidadesLateralCheck.checked = habilidadesNoLateral;
+  }
+}
+function salvarPreferenciaHabilidades() {
+  localStorage.setItem('habilidadesLateral', habilidadesNoLateral);
+}
+if (habilidadesLateralCheck) {
+  habilidadesLateralCheck.addEventListener('change', (e) => {
+    habilidadesNoLateral = e.target.checked;
+    salvarPreferenciaHabilidades();
+    renderResume();
+  });
+}
+
+// ========== CONTROLE DE EXIBIÇÃO DA FOTO NO MODELO 3 ==========
+const mostrarFotoCheck = document.getElementById('mostrarFotoModelo3');
+let mostrarFoto = true;
+function carregarPreferenciaFoto() {
+  const saved = localStorage.getItem('mostrarFotoModelo3');
+  if (saved !== null) {
+    mostrarFoto = saved === 'true';
+    if (mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
+  }
+}
+function salvarPreferenciaFoto() {
+  localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
+}
+if (mostrarFotoCheck) {
+  mostrarFotoCheck.addEventListener('change', (e) => {
+    mostrarFoto = e.target.checked;
+    salvarPreferenciaFoto();
+    renderResume();
+  });
+}
+
+// ========== RENDERIZAÇÃO PRINCIPAL (COM AJUSTE PARA HABILIDADES E FOTO) ==========
 function renderResume(){
   const d = getData();
   document.getElementById('fotoGroup').style.display = currentTemplate===3 ? 'block' : 'none';
   document.getElementById('colorPicker').classList.toggle('show', currentTemplate===1 || currentTemplate===3);
   const tE = inputs.tituloExperiencia.value, tF = inputs.tituloFormacao.value, tC = inputs.tituloCursos.value, tH = inputs.tituloHabilidades.value;
   const objetivoPar = formatContent(d.objetivo);
+  
+  // Constrói a lista de seções (para templates 1 e 2 e parte do 3)
   let sectionsHtml = '';
   for(let sec of sectionsOrder) {
     if(sec.type === 'predefined') {
@@ -630,12 +753,13 @@ function renderResume(){
       else if(sec.id === 'formacao' && !hiddenSections.form) sectionsHtml += `<div class="section"><h3><span>${tF}</span></h3>${formatContent(d.formacao)}</div>`;
       else if(sec.id === 'experiencias' && !hiddenSections.exp) sectionsHtml += `<div class="section"><h3><span>${tE}</span></h3>${formatContent(d.experiencias)}</div>`;
       else if(sec.id === 'cursos' && !hiddenSections.cursos) sectionsHtml += `<div class="section"><h3><span>${tC}</span></h3>${formatContent(d.cursos)}</div>`;
-      else if(sec.id === 'habilidades' && !hiddenSections.hab) sectionsHtml += `<div class="section"><h3><span>${tH}</span></h3>${formatContent(d.habilidades)}</div>`;
+      else if(sec.id === 'habilidades' && !hiddenSections.hab && !habilidadesNoLateral) sectionsHtml += `<div class="section"><h3><span>${tH}</span></h3>${formatContent(d.habilidades)}</div>`;
     } else if(sec.type === 'custom') {
       const cs = customSections.find(c => c.id === sec.id);
       if(cs) sectionsHtml += `<div class="section"><h3><span>${escapeHtml(cs.title)}</span></h3>${formatContent(cs.content)}</div>`;
     }
   }
+  
   let html = '';
   const mostrarLinkedin = document.getElementById('mostrarLinkedin').checked && d.linkedin.trim() !== '';
   
@@ -644,6 +768,7 @@ function renderResume(){
   } else if(currentTemplate === 2){
     html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)}${mostrarLinkedin ? ` &nbsp; <i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}` : ''} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
   } else {
+    // MODELO 3
     let mainSections = '';
     for(let sec of sectionsOrder) {
       if(sec.type === 'predefined') {
@@ -651,7 +776,7 @@ function renderResume(){
         else if(sec.id === 'formacao' && !hiddenSections.form) mainSections += `<div class="section-box"><h3>${tF}</h3>${formatContent(d.formacao)}</div>`;
         else if(sec.id === 'experiencias' && !hiddenSections.exp) mainSections += `<div class="section-box"><h3>${tE}</h3>${formatContent(d.experiencias)}</div>`;
         else if(sec.id === 'cursos' && !hiddenSections.cursos) mainSections += `<div class="section-box"><h3>${tC}</h3>${formatContent(d.cursos)}</div>`;
-        else if(sec.id === 'habilidades' && !hiddenSections.hab) mainSections += `<div class="section-box"><h3>${tH}</h3>${formatContent(d.habilidades)}</div>`;
+        else if(sec.id === 'habilidades' && !hiddenSections.hab && !habilidadesNoLateral) mainSections += `<div class="section-box"><h3>${tH}</h3>${formatContent(d.habilidades)}</div>`;
       } else if(sec.type === 'custom') {
         const cs = customSections.find(c => c.id === sec.id);
         if(cs) mainSections += `<div class="section-box"><h3>${escapeHtml(cs.title)}</h3>${formatContent(cs.content)}</div>`;
@@ -661,15 +786,32 @@ function renderResume(){
     if(mostrarLinkedin) contactHtml += `<br><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}`;
     contactHtml += `<br>📍 ${escapeHtml(d.cidade)}`;
     
-    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoBase64 ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : ''}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${!hiddenSections.hab ? `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>` : ''}</div><div class="offshore-main">${mainSections}</div></div>`;
+    let sidebarHabilidades = '';
+    if (habilidadesNoLateral && !hiddenSections.hab) {
+      sidebarHabilidades = `<div class="side-title">${tH}</div><div class="side-info">${formatContent(d.habilidades)}</div>`;
+    }
+    
+    // Controle da foto: só exibe se houver foto E se a opção "mostrarFoto" estiver ativa
+    const fotoHtml = (fotoBase64 && mostrarFoto) ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : '';
+    
+    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${sidebarHabilidades}</div><div class="offshore-main">${mainSections}</div></div>`;
   }
   resumeDiv.className = `resume template-${currentTemplate}`;
   resumeDiv.innerHTML = html;
   if (editMode) enableInlineEditing();
   applyCustomSpacing(); 
   applyFontStyles();
-  if(currentTemplate === 3) { const img = document.querySelector('.offshore-photo'); if(img && !img.hasAttribute('data-click')){ img.setAttribute('data-click','1'); img.addEventListener('click',()=>document.getElementById('foto').click()); } }
+  applyJustify();
+  if(currentTemplate === 3) { 
+    const img = document.querySelector('.offshore-photo'); 
+    // Adiciona evento de clique apenas se a foto estiver sendo exibida (caso contrário, não há foto para clicar)
+    if(img && !img.hasAttribute('data-click')){ 
+      img.setAttribute('data-click','1'); 
+      img.addEventListener('click',()=>document.getElementById('foto').click()); 
+    } 
+  }
 }
+
 function trocarTemplate(num){ currentTemplate=num; document.querySelectorAll('.temp-btn').forEach(b=>b.classList.remove('active')); document.querySelector(`[data-temp="${num}"]`).classList.add('active'); renderResume(); }
 function carregarDadosLocal(){ 
   const raw = localStorage.getItem('curriculoPremium'); 
@@ -679,7 +821,12 @@ function carregarDadosLocal(){
     if(data.__color) aplicarCor(data.__color); 
     if(data.template) trocarTemplate(data.template); 
     if(data.foto_base64) fotoBase64 = data.foto_base64; 
-    if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin; 
+    if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin;
+    if(data.mostrarFoto !== undefined) {
+      mostrarFoto = data.mostrarFoto;
+      if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
+      localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
+    }
     renderResume(); 
   } 
 }
@@ -689,6 +836,26 @@ function limparDados(){
   renderResume(); 
 }
 function aplicarCor(nome){ if(!colorThemes[nome]) return; currentColor=nome; const r=document.documentElement.style, t=colorThemes[nome]; r.setProperty('--t1-bg-start',t.t1.start); r.setProperty('--t1-bg-end',t.t1.end); r.setProperty('--t1-text',t.t1.text); r.setProperty('--t1-accent',t.t1.accent); r.setProperty('--t3-bg-start',t.t3.start); r.setProperty('--t3-bg-end',t.t3.end); r.setProperty('--t3-text',t.t3.text); r.setProperty('--t3-accent',t.t3.accent); r.setProperty('--t3-border',t.t3.border); renderResume(); }
+
+// ========== JUSTIFICAR TEXTO ==========
+const justifyBtn = document.getElementById('justifyBtn');
+let isJustified = localStorage.getItem('currJustify') === 'true';
+function applyJustify() {
+  if (isJustified) {
+    resumeDiv.classList.add('text-justify');
+    if (justifyBtn) justifyBtn.classList.add('active');
+  } else {
+    resumeDiv.classList.remove('text-justify');
+    if (justifyBtn) justifyBtn.classList.remove('active');
+  }
+  localStorage.setItem('currJustify', isJustified);
+}
+if (justifyBtn) {
+  justifyBtn.addEventListener('click', () => {
+    isJustified = !isJustified;
+    applyJustify();
+  });
+}
 
 // ========== PDF ==========
 function gerarPDF() {
@@ -707,6 +874,7 @@ document.getElementById('btnSalvarLocal').addEventListener('click', () => {
   dados.template = currentTemplate; 
   dados.foto_base64 = fotoBase64; 
   dados.mostrarLinkedin = document.getElementById('mostrarLinkedin').checked;
+  dados.mostrarFoto = mostrarFoto; // salva preferência da foto
   localStorage.setItem('curriculoPremium', JSON.stringify(dados)); 
   alert('✅ Currículo salvo localmente!'); 
 });
@@ -719,6 +887,7 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
   dados.foto_base64 = fotoBase64; 
   dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked;
   dados.linkedin = inputs.linkedin.value;
+  dados.mostrar_foto = mostrarFoto; // salva preferência da foto na nuvem
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
@@ -728,7 +897,7 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
 document.getElementById('btnLimparCampos').addEventListener('click', limparDados);
 document.getElementById('desfazerBtn').addEventListener('click', () => renderResume());
 
-// ========== MODAL LEADS ==========
+// ========== MODAL LEADS E DEMAIS FUNÇÕES ==========
 const modal = document.getElementById('modalCadastros');
 const btnVer = document.getElementById('btnVerCadastros');
 const fecharModal = document.getElementById('fecharModal');
@@ -788,6 +957,11 @@ window.carregarCurriculoDoLocalStorage = function() {
   if(data.template) trocarTemplate(data.template);
   if(data.foto_base64) fotoBase64 = data.foto_base64;
   if(data.mostrarLinkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrarLinkedin;
+  if(data.mostrarFoto !== undefined) {
+    mostrarFoto = data.mostrarFoto;
+    if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
+    localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
+  }
   renderResume();
   modal.classList.remove('show');
   alert('Currículo local carregado!');
@@ -830,6 +1004,11 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.foto_base64) fotoBase64 = data.foto_base64;
       if(data.mostrar_linkedin !== undefined) document.getElementById('mostrarLinkedin').checked = data.mostrar_linkedin;
       if(data.linkedin) inputs.linkedin.value = data.linkedin;
+      if(data.mostrar_foto !== undefined) {
+        mostrarFoto = data.mostrar_foto;
+        if(mostrarFotoCheck) mostrarFotoCheck.checked = mostrarFoto;
+        localStorage.setItem('mostrarFotoModelo3', mostrarFoto);
+      }
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
@@ -837,7 +1016,7 @@ async function carregarCurriculoDaNuvem(id) {
   } catch(err) { alert('Erro ao carregar: '+err.message); }
 }
 
-// ========== BOTÕES ==========
+// ========== BOTÕES ADICIONAIS ==========
 const editBtn = document.getElementById('editModeBtn');
 editBtn.addEventListener('click', () => { editMode = !editMode; if(editMode){ enableInlineEditing(); editBtn.classList.add('active'); } else { disableInlineEditing(); editBtn.classList.remove('active'); } });
 const spacingBtn = document.getElementById('spacingBtn'), spacingModalElem = document.getElementById('spacingModal'), closeSpacing = document.getElementById('closeSpacing');
@@ -869,6 +1048,9 @@ document.querySelectorAll('.temp-btn').forEach(b=>b.addEventListener('click',()=
 document.querySelectorAll('[data-toggle-section]').forEach(btn=>btn.addEventListener('click',()=>toggleSection(btn.dataset.toggleSection)));
 document.getElementById('mostrarLinkedin').addEventListener('change', renderResume);
 carregarDadosLocal(); trocarTemplate(1); renderResume(); loadSectionsOrder(); renderCustomFieldsInForm();
+carregarPreferenciaHabilidades();
+carregarPreferenciaFoto();
+applyJustify();
 </script>
 </body>
 </html>
