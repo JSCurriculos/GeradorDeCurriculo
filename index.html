@@ -37,7 +37,7 @@
 *{ margin:0; padding:0; box-sizing:border-box; }
 body{ font-family:Inter,sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-/* SPLASH */
+/* SPLASH (mantido) */
 .splash{
   position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center;
   background:radial-gradient(circle at 30% 20%, #0a1a2a, #020b14);
@@ -73,7 +73,7 @@ body{ font-family:Inter,sans-serif; background:var(--bg); color:var(--text); ove
 @keyframes floatSmooth{ 0%,100%{ transform:translateY(0); opacity:.7; } 50%{ transform:translateY(-10px); opacity:1; } }
 .enter-btn { background: var(--gold); color: #0f172a; border: none; border-radius: 40px; padding: 10px 24px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 1rem; }
 
-/* DASHBOARD */
+/* DASHBOARD (mantido) */
 .dashboard{
   max-width:1500px; margin:auto; padding:20px; display:grid; grid-template-columns:360px 1fr; gap:24px;
   opacity:0; transform:translateY(10px); transition:opacity .5s, transform .5s;
@@ -157,7 +157,7 @@ button:hover{ transform:translateY(-2px); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-/* MODELO 3 - SIDEBAR ESTICA ATÉ O FINAL E PONTA ARREDONDADA */
+/* MODELO 3 - SIDEBAR CORRIGIDA (SEM overflow:hidden) */
 .template-3 .offshore-layout { 
   display: grid; 
   grid-template-columns: 280px 1fr; 
@@ -171,9 +171,6 @@ button:hover{ transform:translateY(-2px); }
   flex-direction: column;
   height: 100%;
   border-radius: 0 0 24px 24px;
-  overflow: hidden;
-  page-break-inside: avoid;
-  break-inside: avoid;
 }
 .template-3 .offshore-photo { 
   width: 160px; 
@@ -209,40 +206,23 @@ button:hover{ transform:translateY(-2px); }
   line-height: 1.6; 
   font-size: 0.9rem; 
 }
-/* Formatação melhorada dos contatos */
-.template-3 .side-info .contact-item {
+
+/* ===== NOVO ESTILO PARA CONTATOS EM UMA LINHA ===== */
+.template-3 .contact {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
   flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 10px;
 }
-.template-3 .side-info .contact-icon {
-  width: 24px;
-  text-align: center;
-  font-size: 1rem;
+.template-3 .contact span {
+  white-space: nowrap;
+  font-size: 0.9rem;
 }
-.template-3 .side-info .contact-text {
-  flex: 1;
-  word-break: break-word;
+.template-3 .contact span i {
+  margin-right: 4px;
 }
-.template-3 .side-info .linkedin-text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.template-3 .side-info .linkedin-text i {
-  width: 24px;
-  font-size: 1rem;
-  text-align: center;
-}
-/* Linha divisória suave (opcional) */
-.template-3 .offshore-sidebar .side-info .contact-item:not(:last-child),
-.template-3 .offshore-sidebar .side-info .linkedin-text:not(:last-child) {
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding-bottom: 8px;
-}
+
+/* demais estilos da sidebar */
 .template-3 .side-info ul {
   list-style: disc;
   margin-left: 0;
@@ -262,7 +242,7 @@ button:hover{ transform:translateY(-2px); }
   background: white;
 }
 
-/* MODAIS */
+/* MODAIS (mantidos) */
 .sections-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center; }
 .sections-modal.show { display: flex; }
 .sections-modal-content { background:white; width:90%; max-width:550px; max-height:80vh; border-radius:32px; overflow:auto; padding:20px; }
@@ -382,7 +362,7 @@ button:hover{ transform:translateY(-2px); }
   .offshore-main, .offshore-sidebar {
     margin: 0;
   }
-  /* Evita quebras feias nos contatos */
+  /* Contatos no PDF */
   .template-3 .side-info .contact-item,
   .template-3 .side-info .linkedin-text {
     break-inside: avoid;
@@ -547,7 +527,7 @@ button:hover{ transform:translateY(-2px); }
   </div>
 </div>
 
-<!-- Modais -->
+<!-- Modais (mantidos) -->
 <div id="spacingModal" style="display:none; position:fixed; bottom:20px; right:20px; background:white; border-radius:16px; padding:16px; z-index:10001; width:260px;">
   <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Ajustar espaçamento</strong><button id="closeSpacing" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button></div>
   <label>Margem externa: <span id="marginValue">0</span>px</label><input type="range" id="marginSlider" min="0" max="40" value="0" step="2">
@@ -994,31 +974,22 @@ function renderResume(){
       }
     }
     
-    // Contatos formatados com ícones alinhados
+    // ============================================================
+    // AQUI ESTÁ A ALTERAÇÃO: contatos em uma única linha
+    // ============================================================
     let contactHtml = `
-      <div class="contact-item">
-        <span class="contact-icon">📞</span>
-        <span class="contact-text">${escapeHtml(d.telefone)}</span>
-      </div>
-      <div class="contact-item">
-        <span class="contact-icon">✉</span>
-        <span class="contact-text">${escapeHtml(d.email)}</span>
-      </div>
+      <div class="contact">
+        <span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span>
+        <span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>
     `;
     if(mostrarLinkedin) {
-      contactHtml += `
-        <div class="linkedin-text">
-          <i class="fab fa-linkedin"></i>
-          <span>${escapeHtml(d.linkedin)}</span>
-        </div>
-      `;
+      contactHtml += `<span><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>`;
     }
     contactHtml += `
-      <div class="contact-item">
-        <span class="contact-icon">📍</span>
-        <span class="contact-text">${escapeHtml(d.cidade)}</span>
+        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span>
       </div>
     `;
+    // ============================================================
     
     let sidebarHabilidades = '';
     if (habilidadesNoLateral && !hiddenSections.hab) {
@@ -1032,7 +1003,7 @@ function renderResume(){
     
     const fotoHtml = (fotoBase64 && mostrarFoto) ? `<img class="offshore-photo" src="${fotoBase64}" alt="foto">` : '';
     
-    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div><div class="side-info">${contactHtml}</div>${sidebarHabilidades}${secaoLateralHtml}</div><div class="offshore-main">${mainSections}</div></div>`;
+    html = `<div class="offshore-layout"><div class="offshore-sidebar">${fotoHtml}<div class="offshore-name">${escapeHtml(d.nome)}</div><div class="offshore-role">${escapeHtml(d.cargo)}</div><div class="side-title">CONTATO</div>${contactHtml}${sidebarHabilidades}${secaoLateralHtml}</div><div class="offshore-main">${mainSections}</div></div>`;
   }
   resumeDiv.className = `resume template-${currentTemplate}`;
   resumeDiv.innerHTML = html;
@@ -1165,7 +1136,6 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
   dados.secao_lateral_ativa = secaoLateralAtiva; 
   dados.secao_lateral_titulo = tituloSecaoLateral ? tituloSecaoLateral.value : ''; 
   dados.secao_lateral_conteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
-  // NÃO enviamos photo_margin_* para o Supabase para evitar erro de coluna
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
@@ -1290,7 +1260,6 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.secao_lateral_ativa !== undefined) { secaoLateralAtiva = data.secao_lateral_ativa; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva; if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none'; }
       if(data.secao_lateral_titulo && tituloSecaoLateral) tituloSecaoLateral.value = data.secao_lateral_titulo;
       if(data.secao_lateral_conteudo && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secao_lateral_conteudo;
-      // Não carregamos photo_margin_* porque não estão na nuvem
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
