@@ -73,7 +73,7 @@ body{ font-family:Inter,sans-serif; background:var(--bg); color:var(--text); ove
 @keyframes floatSmooth{ 0%,100%{ transform:translateY(0); opacity:.7; } 50%{ transform:translateY(-10px); opacity:1; } }
 .enter-btn { background: var(--gold); color: #0f172a; border: none; border-radius: 40px; padding: 10px 24px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 1rem; }
 
-/* DASHBOARD (mantido) */
+/* DASHBOARD */
 .dashboard{
   max-width:1500px; margin:auto; padding:20px; display:grid; grid-template-columns:360px 1fr; gap:24px;
   opacity:0; transform:translateY(10px); transition:opacity .5s, transform .5s;
@@ -157,7 +157,7 @@ button:hover{ transform:translateY(-2px); }
 .template-2 .resume-name{ color:var(--royal); margin-bottom:10px; }
 .template-2 .section{ border:1px solid #e7edf5; border-radius:16px; padding:20px; margin-bottom:20px; }
 
-/* MODELO 3 - SIDEBAR CORRIGIDA (SEM overflow:hidden) */
+/* MODELO 3 - SIDEBAR CORRIGIDA */
 .template-3 .offshore-layout { 
   display: grid; 
   grid-template-columns: 280px 1fr; 
@@ -207,19 +207,24 @@ button:hover{ transform:translateY(-2px); }
   font-size: 0.9rem; 
 }
 
-/* ===== NOVO ESTILO PARA CONTATOS EM UMA LINHA ===== */
+/* ===== CONTATOS NO MODELO 3 – quebra e cor LinkedIn ===== */
 .template-3 .contact {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
   margin-top: 10px;
 }
-.template-3 .contact span {
-  white-space: nowrap;
+.template-3 .offshore-sidebar .contact span {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
   font-size: 0.9rem;
 }
-.template-3 .contact span i {
+.template-3 .offshore-sidebar .contact span i {
   margin-right: 4px;
+}
+.template-3 .offshore-sidebar .contact span.linkedin-span {
+  color: var(--t3-accent);
 }
 
 /* demais estilos da sidebar */
@@ -273,7 +278,7 @@ button:hover{ transform:translateY(-2px); }
 .lista-item { background:#f8fafc; border-radius:16px; padding:14px 18px; margin-bottom:12px; border-left:4px solid var(--gold); }
 .btn-carregar { background:var(--gold); color:#1e293b; border:none; padding:6px 14px; border-radius:30px; margin-top:8px; font-size:0.75rem; cursor:pointer; }
 
-/* ========== IMPRESSÃO (PDF) – FOTO REDONDA E SIDEBAR NÃO REPETIR ========== */
+/* ========== IMPRESSÃO (PDF) ========== */
 @media print {
   @page {
     margin: 0;
@@ -362,7 +367,6 @@ button:hover{ transform:translateY(-2px); }
   .offshore-main, .offshore-sidebar {
     margin: 0;
   }
-  /* Contatos no PDF */
   .template-3 .side-info .contact-item,
   .template-3 .side-info .linkedin-text {
     break-inside: avoid;
@@ -410,7 +414,7 @@ button:hover{ transform:translateY(-2px); }
       <div class="input-group"><label>E-mail</label><input id="email" placeholder="contato@exemplo.com"></div>
       <div class="input-group"><label>Cidade / Estado</label><input id="cidade" placeholder="São Paulo - SP"></div>
       <div class="input-group"><label>Objetivo profissional</label><textarea id="objetivo" placeholder="Descreva seu objetivo profissional..."></textarea></div>
-      <!-- NOVO CAMPO: Título Objetivo -->
+      <!-- CAMPO TÍTULO OBJETIVO -->
       <div class="input-group"><label>Título Objetivo</label><input id="tituloObjetivo" value="OBJETIVO PROFISSIONAL"></div>
       <div class="input-group"><label>Experiências</label>
         <div class="textarea-toolbar">
@@ -446,7 +450,7 @@ button:hover{ transform:translateY(-2px); }
       </div>
       <div class="input-group" id="fotoGroup"><label>Foto do candidato</label><input type="file" id="foto" accept="image/*"></div>
       
-      <!-- Checkboxes organizados em grid -->
+      <!-- Checkboxes -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
         <div class="input-group" style="margin-bottom: 0;">
           <label style="display: flex; align-items: center; gap: 8px;">
@@ -488,7 +492,6 @@ button:hover{ transform:translateY(-2px); }
         <button class="btn-dark" id="btnSalvarNuvem"><i class="fas fa-cloud-upload-alt"></i> Salvar na nuvem</button>
         <button class="btn-light" id="btnSalvarLocal"><i class="fas fa-save"></i> Salvar local</button>
         <button class="btn-light" id="btnLimparCampos"><i class="fas fa-eraser"></i> Limpar dados</button>
-        <!-- BOTÃO PARA OCULTAR OBJETIVO -->
         <button class="btn-light" data-toggle-section="obj">Ocultar Objetivo</button>
         <button class="btn-light" data-toggle-section="exp">Ocultar Experiência</button>
         <button class="btn-light" data-toggle-section="form">Ocultar Formação</button>
@@ -763,13 +766,11 @@ document.querySelectorAll('.format-btn').forEach(btn => {
 });
 
 // ========== EDITOR PRINCIPAL ==========
-// ADICIONADO 'tituloObjetivo' ao array ids
 const ids = ['nome','cargo','telefone','email','cidade','objetivo','tituloObjetivo','experiencias','formacao','cursos','habilidades','tituloExperiencia','tituloFormacao','tituloCursos','tituloHabilidades','linkedin'];
 const inputs = {};
 ids.forEach(id=>inputs[id]=document.getElementById(id));
 const resumeDiv = document.getElementById('resume');
 let currentTemplate = 1;
-// hiddenSections agora tem 'obj'
 let hiddenSections = { exp:false, form:false, cursos:false, hab:false, obj:false };
 let lastState = null, fotoBase64 = '', currentColor = 'royal', editMode = false;
 const colorThemes = {
@@ -941,7 +942,7 @@ function renderResume(){
   document.getElementById('fotoGroup').style.display = currentTemplate===3 ? 'block' : 'none';
   document.getElementById('colorPicker').classList.toggle('show', currentTemplate===1 || currentTemplate===3);
   const tE = inputs.tituloExperiencia.value, tF = inputs.tituloFormacao.value, tC = inputs.tituloCursos.value, tH = inputs.tituloHabilidades.value;
-  const tituloObj = d.tituloObjetivo; // campo personalizado
+  const tituloObj = d.tituloObjetivo;
   const objetivoPar = formatContent(d.objetivo);
   
   let sectionsHtml = '';
@@ -993,7 +994,7 @@ function renderResume(){
         <span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>
     `;
     if(mostrarLinkedin) {
-      contactHtml += `<span><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>`;
+      contactHtml += `<span class="linkedin-span"><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>`;
     }
     contactHtml += `
         <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span>
@@ -1132,7 +1133,7 @@ document.getElementById('btnSalvarLocal').addEventListener('click', () => {
   localStorage.setItem('curriculoPremium', JSON.stringify(dados)); alert('✅ Currículo salvo localmente!'); 
 });
 
-// ========== SALVAR NA NUVEM ==========
+// ========== SALVAR NA NUVEM – agora com tituloObjetivo e nomes corretos ==========
 document.getElementById('btnSalvarNuvem').addEventListener('click', async () => { 
   const dados = {}; 
   Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
@@ -1142,12 +1143,16 @@ document.getElementById('btnSalvarNuvem').addEventListener('click', async () => 
   dados.mostrar_linkedin = document.getElementById('mostrarLinkedin').checked; 
   dados.linkedin = inputs.linkedin.value; 
   dados.mostrar_foto = mostrarFoto; 
-  dados.secao_lateral_ativa = secaoLateralAtiva; 
+  dados.secao_lateral_ativa = secaoLateralAtiva;   // nome corrigido
   dados.secao_lateral_titulo = tituloSecaoLateral ? tituloSecaoLateral.value : ''; 
   dados.secao_lateral_conteudo = conteudoSecaoLateral ? conteudoSecaoLateral.value : '';
+  dados.tituloobjetivo = inputs.tituloObjetivo.value;   // <-- novo campo enviado
+  
   const sup = initSupabase(); 
   const dadosLower = {}; 
   for(let [k,v] of Object.entries(dados)) dadosLower[k.toLowerCase()] = v; 
+  
+  // Verifique se a coluna 'tituloobjetivo' existe no Supabase (adicione se necessário)
   const { error } = await sup.from('curriculos').insert([dadosLower]); 
   alert(error ? '❌ Erro: '+error.message : '✅ Salvo na nuvem!'); 
 });
@@ -1259,7 +1264,11 @@ async function carregarCurriculoDaNuvem(id) {
     const { data, error } = await sup.from('curriculos').select('*').eq('id', id).single();
     if(error) throw error;
     if(data) {
-      Object.keys(inputs).forEach(k => { if(data[k.toLowerCase()] !== undefined) inputs[k].value = data[k.toLowerCase()]; });
+      // Mapear os dados da nuvem para os inputs (usando lower case)
+      Object.keys(inputs).forEach(k => {
+        const col = k.toLowerCase();
+        if(data[col] !== undefined) inputs[k].value = data[col];
+      });
       if(data.cor) aplicarCor(data.cor);
       if(data.template) trocarTemplate(data.template);
       if(data.foto_base64) fotoBase64 = data.foto_base64;
@@ -1269,6 +1278,8 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.secao_lateral_ativa !== undefined) { secaoLateralAtiva = data.secao_lateral_ativa; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva; if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none'; }
       if(data.secao_lateral_titulo && tituloSecaoLateral) tituloSecaoLateral.value = data.secao_lateral_titulo;
       if(data.secao_lateral_conteudo && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secao_lateral_conteudo;
+      // carregar também tituloobjetivo se existir
+      if(data.tituloobjetivo) inputs.tituloObjetivo.value = data.tituloobjetivo;
       renderResume();
       modal.classList.remove('show');
       alert('Currículo carregado da nuvem!');
