@@ -410,6 +410,8 @@ button:hover{ transform:translateY(-2px); }
       <div class="input-group"><label>E-mail</label><input id="email" placeholder="contato@exemplo.com"></div>
       <div class="input-group"><label>Cidade / Estado</label><input id="cidade" placeholder="São Paulo - SP"></div>
       <div class="input-group"><label>Objetivo profissional</label><textarea id="objetivo" placeholder="Descreva seu objetivo profissional..."></textarea></div>
+      <!-- NOVO CAMPO: Título Objetivo -->
+      <div class="input-group"><label>Título Objetivo</label><input id="tituloObjetivo" value="OBJETIVO PROFISSIONAL"></div>
       <div class="input-group"><label>Experiências</label>
         <div class="textarea-toolbar">
           <button type="button" data-target="experiencias" class="format-btn" data-format="bold"><b>N</b></button>
@@ -486,6 +488,8 @@ button:hover{ transform:translateY(-2px); }
         <button class="btn-dark" id="btnSalvarNuvem"><i class="fas fa-cloud-upload-alt"></i> Salvar na nuvem</button>
         <button class="btn-light" id="btnSalvarLocal"><i class="fas fa-save"></i> Salvar local</button>
         <button class="btn-light" id="btnLimparCampos"><i class="fas fa-eraser"></i> Limpar dados</button>
+        <!-- BOTÃO PARA OCULTAR OBJETIVO -->
+        <button class="btn-light" data-toggle-section="obj">Ocultar Objetivo</button>
         <button class="btn-light" data-toggle-section="exp">Ocultar Experiência</button>
         <button class="btn-light" data-toggle-section="form">Ocultar Formação</button>
         <button class="btn-light" data-toggle-section="cursos">Ocultar Cursos</button>
@@ -759,11 +763,15 @@ document.querySelectorAll('.format-btn').forEach(btn => {
 });
 
 // ========== EDITOR PRINCIPAL ==========
-const ids = ['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','tituloExperiencia','tituloFormacao','tituloCursos','tituloHabilidades','linkedin'];
+// ADICIONADO 'tituloObjetivo' ao array ids
+const ids = ['nome','cargo','telefone','email','cidade','objetivo','tituloObjetivo','experiencias','formacao','cursos','habilidades','tituloExperiencia','tituloFormacao','tituloCursos','tituloHabilidades','linkedin'];
 const inputs = {};
 ids.forEach(id=>inputs[id]=document.getElementById(id));
 const resumeDiv = document.getElementById('resume');
-let currentTemplate = 1, hiddenSections = { exp:false, form:false, cursos:false, hab:false }, lastState = null, fotoBase64 = '', currentColor = 'royal', editMode = false;
+let currentTemplate = 1;
+// hiddenSections agora tem 'obj'
+let hiddenSections = { exp:false, form:false, cursos:false, hab:false, obj:false };
+let lastState = null, fotoBase64 = '', currentColor = 'royal', editMode = false;
 const colorThemes = {
   royal: { t1:{start:'#082642',end:'#031320',text:'#ffffff',accent:'#d4af37'}, t3:{start:'#082642',end:'#03111f',text:'#ffffff',accent:'#f3df96',border:'rgba(255,255,255,.15)'} },
   darkgray: { t1:{start:'#2d2d2d',end:'#111111',text:'#ffffff',accent:'#d4af37'}, t3:{start:'#2d2d2d',end:'#111111',text:'#ffffff',accent:'#d4af37',border:'rgba(255,255,255,.15)'} },
@@ -771,7 +779,7 @@ const colorThemes = {
   white: { t1:{start:'#ffffff',end:'#eeeeee',text:'#1e293b',accent:'#082642'}, t3:{start:'#ffffff',end:'#eaeaea',text:'#1e293b',accent:'#082642',border:'rgba(8,38,66,.2)'} }
 };
 function escapeHtml(t){ return (t||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function getData(){ return { nome:inputs.nome.value||'Seu Nome', cargo:inputs.cargo.value||'Cargo', telefone:inputs.telefone.value||'(00) 00000-0000', email:inputs.email.value||'email@exemplo.com', cidade:inputs.cidade.value||'Cidade', objetivo:inputs.objetivo.value||'Objetivo...', experiencias:inputs.experiencias.value||'', formacao:inputs.formacao.value||'', cursos:inputs.cursos.value||'', habilidades:inputs.habilidades.value||'', linkedin:inputs.linkedin.value||'' }; }
+function getData(){ return { nome:inputs.nome.value||'Seu Nome', cargo:inputs.cargo.value||'Cargo', telefone:inputs.telefone.value||'(00) 00000-0000', email:inputs.email.value||'email@exemplo.com', cidade:inputs.cidade.value||'Cidade', objetivo:inputs.objetivo.value||'Objetivo...', tituloObjetivo:inputs.tituloObjetivo.value||'OBJETIVO PROFISSIONAL', experiencias:inputs.experiencias.value||'', formacao:inputs.formacao.value||'', cursos:inputs.cursos.value||'', habilidades:inputs.habilidades.value||'', linkedin:inputs.linkedin.value||'' }; }
 function salvarEstado(){ lastState = JSON.stringify(hiddenSections); }
 function desfazerAcao(){ if(lastState){ hiddenSections = JSON.parse(lastState); renderResume(); } }
 function toggleSection(s){ salvarEstado(); hiddenSections[s]=!hiddenSections[s]; renderResume(); }
@@ -933,12 +941,15 @@ function renderResume(){
   document.getElementById('fotoGroup').style.display = currentTemplate===3 ? 'block' : 'none';
   document.getElementById('colorPicker').classList.toggle('show', currentTemplate===1 || currentTemplate===3);
   const tE = inputs.tituloExperiencia.value, tF = inputs.tituloFormacao.value, tC = inputs.tituloCursos.value, tH = inputs.tituloHabilidades.value;
+  const tituloObj = d.tituloObjetivo; // campo personalizado
   const objetivoPar = formatContent(d.objetivo);
   
   let sectionsHtml = '';
   for(let sec of sectionsOrder) {
     if(sec.type === 'predefined') {
-      if(sec.id === 'objetivo') sectionsHtml += `<div class="section"><h3><span>OBJETIVO PROFISSIONAL</span></h3>${objetivoPar}</div>`;
+      if(sec.id === 'objetivo' && !hiddenSections.obj) {
+        sectionsHtml += `<div class="section"><h3><span>${tituloObj}</span></h3>${objetivoPar}</div>`;
+      }
       else if(sec.id === 'formacao' && !hiddenSections.form) sectionsHtml += `<div class="section"><h3><span>${tF}</span></h3>${formatContent(d.formacao)}</div>`;
       else if(sec.id === 'experiencias' && !hiddenSections.exp) sectionsHtml += `<div class="section"><h3><span>${tE}</span></h3>${formatContent(d.experiencias)}</div>`;
       else if(sec.id === 'cursos' && !hiddenSections.cursos) sectionsHtml += `<div class="section"><h3><span>${tC}</span></h3>${formatContent(d.cursos)}</div>`;
@@ -963,7 +974,9 @@ function renderResume(){
     let mainSections = '';
     for(let sec of sectionsOrder) {
       if(sec.type === 'predefined') {
-        if(sec.id === 'objetivo') mainSections += `<div class="section-box"><h3>OBJETIVO PROFISSIONAL</h3>${objetivoPar}</div>`;
+        if(sec.id === 'objetivo' && !hiddenSections.obj) {
+          mainSections += `<div class="section-box"><h3>${tituloObj}</h3>${objetivoPar}</div>`;
+        }
         else if(sec.id === 'formacao' && !hiddenSections.form) mainSections += `<div class="section-box"><h3>${tF}</h3>${formatContent(d.formacao)}</div>`;
         else if(sec.id === 'experiencias' && !hiddenSections.exp) mainSections += `<div class="section-box"><h3>${tE}</h3>${formatContent(d.experiencias)}</div>`;
         else if(sec.id === 'cursos' && !hiddenSections.cursos) mainSections += `<div class="section-box"><h3>${tC}</h3>${formatContent(d.cursos)}</div>`;
@@ -974,9 +987,6 @@ function renderResume(){
       }
     }
     
-    // ============================================================
-    // AQUI ESTÁ A ALTERAÇÃO: contatos em uma única linha
-    // ============================================================
     let contactHtml = `
       <div class="contact">
         <span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span>
@@ -989,7 +999,6 @@ function renderResume(){
         <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span>
       </div>
     `;
-    // ============================================================
     
     let sidebarHabilidades = '';
     if (habilidadesNoLateral && !hiddenSections.hab) {
@@ -1052,7 +1061,7 @@ function carregarDadosLocal(){
   } 
 }
 function limparDados(){ 
-  const campos=['nome','cargo','telefone','email','cidade','objetivo','experiencias','formacao','cursos','habilidades','linkedin']; 
+  const campos=['nome','cargo','telefone','email','cidade','objetivo','tituloObjetivo','experiencias','formacao','cursos','habilidades','linkedin']; 
   campos.forEach(id=>{ if(inputs[id]) inputs[id].value=''; }); 
   if(tituloSecaoLateral) tituloSecaoLateral.value = '';
   if(conteudoSecaoLateral) conteudoSecaoLateral.value = '';
@@ -1123,7 +1132,7 @@ document.getElementById('btnSalvarLocal').addEventListener('click', () => {
   localStorage.setItem('curriculoPremium', JSON.stringify(dados)); alert('✅ Currículo salvo localmente!'); 
 });
 
-// ========== SALVAR NA NUVEM (SEM OS CAMPOS DE FOTO MARGIN) ==========
+// ========== SALVAR NA NUVEM ==========
 document.getElementById('btnSalvarNuvem').addEventListener('click', async () => { 
   const dados = {}; 
   Object.keys(inputs).forEach(k => dados[k] = inputs[k].value); 
