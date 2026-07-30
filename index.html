@@ -223,9 +223,6 @@ button:hover{ transform:translateY(-2px); }
 .template-3 .offshore-sidebar .contact span i {
   margin-right: 4px;
 }
-.template-3 .offshore-sidebar .contact span.linkedin-span {
-  color: var(--t3-accent);
-}
 
 /* demais estilos da sidebar */
 .template-3 .side-info ul {
@@ -968,8 +965,24 @@ function renderResume(){
     const linkedinSpan = mostrarLinkedin ? `<span class="linkedin-span"><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : '';
     html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact"><span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span><span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>${linkedinSpan}<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span></div></div><div class="resume-body">${sectionsHtml}</div>`;
   } else if(currentTemplate === 2){
-    const linkedinPart = mostrarLinkedin ? `<span class="linkedin-span"> &nbsp; <i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>` : '';
-    html = `<div class="resume-top"><div class="resume-name">${escapeHtml(d.nome)}</div><div class="resume-role">${escapeHtml(d.cargo)}</div><div class="contact">📞 ${escapeHtml(d.telefone)} &nbsp; ✉ ${escapeHtml(d.email)}${linkedinPart} &nbsp; 📍 ${escapeHtml(d.cidade)}</div></div><div class="resume-body">${sectionsHtml}</div>`;
+    // ==== MODELO 2 REFORMULADO ====
+    let contatoHtml = `
+      <span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span>
+      <span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>
+    `;
+    if (mostrarLinkedin) {
+      contatoHtml += `<span class="linkedin-span"><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>`;
+    }
+    contatoHtml += `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span>`;
+
+    html = `
+      <div class="resume-top">
+        <div class="resume-name">${escapeHtml(d.nome)}</div>
+        <div class="resume-role">${escapeHtml(d.cargo)}</div>
+        <div class="contact">${contatoHtml}</div>
+      </div>
+      <div class="resume-body">${sectionsHtml}</div>
+    `;
   } else {
     // MODELO 3
     let mainSections = '';
@@ -1264,7 +1277,6 @@ async function carregarCurriculoDaNuvem(id) {
     const { data, error } = await sup.from('curriculos').select('*').eq('id', id).single();
     if(error) throw error;
     if(data) {
-      // Mapear os dados da nuvem para os inputs (usando lower case)
       Object.keys(inputs).forEach(k => {
         const col = k.toLowerCase();
         if(data[col] !== undefined) inputs[k].value = data[col];
@@ -1278,7 +1290,6 @@ async function carregarCurriculoDaNuvem(id) {
       if(data.secao_lateral_ativa !== undefined) { secaoLateralAtiva = data.secao_lateral_ativa; if(habilitarSecaoLateralCheck) habilitarSecaoLateralCheck.checked = secaoLateralAtiva; if(secaoLateralFields) secaoLateralFields.style.display = secaoLateralAtiva ? 'block' : 'none'; }
       if(data.secao_lateral_titulo && tituloSecaoLateral) tituloSecaoLateral.value = data.secao_lateral_titulo;
       if(data.secao_lateral_conteudo && conteudoSecaoLateral) conteudoSecaoLateral.value = data.secao_lateral_conteudo;
-      // carregar também tituloobjetivo se existir
       if(data.tituloobjetivo) inputs.tituloObjetivo.value = data.tituloobjetivo;
       renderResume();
       modal.classList.remove('show');
