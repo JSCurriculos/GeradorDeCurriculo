@@ -239,17 +239,18 @@ button:hover{ transform:translateY(-2px); }
 
 .template-3 .offshore-sidebar .contact-item {
   display: flex !important;
-  align-items: center !important;
+  align-items: flex-start !important;
   justify-content: flex-start !important;
-  flex: 0 0 18px !important;
+  flex: 0 0 auto !important;
   width: 100% !important;
   min-width: 0 !important;
-  height: 18px !important;
+  height: auto !important;
+  min-height: 18px !important;
   margin: 0 0 6px 0 !important;
   padding: 0 !important;
-  line-height: 18px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
 }
 
@@ -271,9 +272,21 @@ button:hover{ transform:translateY(-2px); }
 .template-3 .offshore-sidebar .contact-item .contact-value {
   display: block !important;
   min-width: 0 !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  flex: 1 1 auto !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+/* LinkedIn: mostrar a URL completa, sem reticências. Ela pode quebrar em mais de uma linha. */
+.template-3 .offshore-sidebar .contact-item.linkedin-item .contact-value {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 
 /* demais estilos da sidebar */
@@ -1063,7 +1076,7 @@ function renderResume(){
         <div class="contact-item"><i class="fas fa-envelope"></i><span class="contact-value">${escapeHtml(d.email)}</span></div>
     `;
     if(mostrarLinkedin) {
-      contactHtml += `<div class="contact-item"><i class="fab fa-linkedin"></i><span class="contact-value">${escapeHtml(d.linkedin)}</span></div>`;
+      contactHtml += `<div class="contact-item linkedin-item"><i class="fab fa-linkedin"></i><span class="contact-value">${escapeHtml(d.linkedin)}</span></div>`;
     }
     contactHtml += `
         <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span class="contact-value">${escapeHtml(d.cidade)}</span></div>
