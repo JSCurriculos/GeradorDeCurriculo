@@ -262,6 +262,45 @@ button:hover{ transform:translateY(-2px); }
   word-break: keep-all;
   overflow-wrap: normal;
 }
+/* CORREÇÃO DEFINITIVA — MODELO 3: UM CONTATO POR LINHA */
+.template-3 .offshore-sidebar .contact {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 7px !important;
+  width: 100% !important;
+}
+
+.template-3 .offshore-sidebar .contact > span {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 0.68rem !important;
+  line-height: 1.25 !important;
+}
+
+.template-3 .offshore-sidebar .contact > span > i {
+  flex: 0 0 13px !important;
+  width: 13px !important;
+  min-width: 13px !important;
+  margin-right: 4px !important;
+  text-align: center !important;
+}
+
+.template-3 .offshore-sidebar .contact > span.linkedin-span {
+  display: flex !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 /* MODAIS (mantidos) */
 .sections-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center; }
 .sections-modal.show { display: flex; }
