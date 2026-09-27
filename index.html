@@ -209,44 +209,40 @@ button:hover{ transform:translateY(-2px); }
 
 /* ===== CONTATOS DO MODELO 3 ===== */
 .template-3 .offshore-sidebar .contact {
-  display: flex !important;
-  flex-direction: column !important;
-  flex-wrap: nowrap !important;
-  align-items: stretch !important;
-  gap: 6px !important;
+  display: block !important;
   width: 100% !important;
   margin-top: 10px !important;
+  font-size: 0.68rem !important;
 }
 
-.template-3 .offshore-sidebar .contact > span {
+.template-3 .offshore-sidebar .contact-item {
   display: flex !important;
-  flex: 0 0 auto !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  height: auto !important;
-  min-height: 14px !important;
   align-items: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 18px !important;
+  margin: 0 0 6px 0 !important;
+  padding: 0 !important;
+  line-height: 18px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  font-size: 0.68rem !important;
-  line-height: 1.25 !important;
-  margin: 0 !important;
+  box-sizing: border-box !important;
 }
 
-.template-3 .offshore-sidebar .contact > span > i {
+.template-3 .offshore-sidebar .contact-item i {
+  display: inline-block !important;
   flex: 0 0 12px !important;
   width: 12px !important;
-  min-width: 12px !important;
   margin-right: 5px !important;
   text-align: center !important;
 }
 
-.template-3 .offshore-sidebar .contact .linkedin-span {
-  white-space: nowrap !important;
+.template-3 .offshore-sidebar .contact-item .contact-value {
+  display: block !important;
+  min-width: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 /* demais estilos da sidebar */
@@ -1032,14 +1028,14 @@ function renderResume(){
     
     let contactHtml = `
       <div class="contact">
-        <span><i class="fas fa-phone"></i> ${escapeHtml(d.telefone)}</span>
-        <span><i class="fas fa-envelope"></i> ${escapeHtml(d.email)}</span>
+        <div class="contact-item"><i class="fas fa-phone"></i><span class="contact-value">${escapeHtml(d.telefone)}</span></div>
+        <div class="contact-item"><i class="fas fa-envelope"></i><span class="contact-value">${escapeHtml(d.email)}</span></div>
     `;
     if(mostrarLinkedin) {
-      contactHtml += `<span class="linkedin-span"><i class="fab fa-linkedin"></i> ${escapeHtml(d.linkedin)}</span>`;
+      contactHtml += `<div class="contact-item"><i class="fab fa-linkedin"></i><span class="contact-value">${escapeHtml(d.linkedin)}</span></div>`;
     }
     contactHtml += `
-        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(d.cidade)}</span>
+        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span class="contact-value">${escapeHtml(d.cidade)}</span></div>
       </div>
     `;
     
