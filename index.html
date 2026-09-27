@@ -452,6 +452,36 @@ button:hover{ transform:translateY(-2px); }
   .template-3 .offshore-photo { margin: 0 auto 20px; }
   .btn-group button { font-size: 0.7rem; padding: 6px 10px; }
 }
+
+/* ===== MODELO 3 - LINKEDIN SEM RETICÊNCIAS ===== */
+.template-3 .offshore-sidebar .contact-item.linkedin-item,
+.template-3 .offshore-sidebar .contact-item.linkedin-item .contact-value {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.template-3 .offshore-sidebar .contact-item.linkedin-item .contact-value {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  hyphens: none !important;
+}
+
+/* Garante que nenhuma regra antiga do LinkedIn crie "..." */
+.template-3 .offshore-sidebar .linkedin-span,
+.template-3 .offshore-sidebar .linkedin-text {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
 </style>
 </head>
 <body>
@@ -545,7 +575,7 @@ button:hover{ transform:translateY(-2px); }
         <div class="input-group"><label>Conteúdo da seção lateral</label><textarea id="conteudoSecaoLateral" placeholder="Digite o conteúdo..."></textarea></div>
       </div>
       
-      <div class="input-group"><label>LinkedIn (opcional)</label><input id="linkedin" placeholder="linkedin.com/in/seu-perfil"></div>
+      <div class="input-group"><label>LinkedIn (opcional)</label><input id="linkedin" placeholder="www.linkedin.com/in/seu-perfil"></div>
       
       <div class="input-group"><label>Título Experiência</label><input id="tituloExperiencia" value="EXPERIÊNCIA PROFISSIONAL"></div>
       <div class="input-group"><label>Título Formação</label><input id="tituloFormacao" value="FORMAÇÃO"></div>
