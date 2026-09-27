@@ -207,17 +207,41 @@ button:hover{ transform:translateY(-2px); }
   font-size: 0.9rem; 
 }
 
-/* ===== CONTATOS DO MODELO 3 ===== */
+/* ===== CONTATOS DO MODELO 3 — CORREÇÃO DEFINITIVA ===== */
+.template-3 .offshore-sidebar {
+  height: auto !important;
+  min-height: 100% !important;
+}
+
+/* Impede o flex da sidebar de comprimir/empilhar os contatos sobre outras seções. */
+.template-3 .offshore-sidebar > * {
+  flex-shrink: 0 !important;
+}
+
 .template-3 .offshore-sidebar .contact {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  flex: 0 0 auto !important;
   width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
   margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
   font-size: 0.68rem !important;
+  line-height: 1 !important;
+  overflow: visible !important;
 }
 
 .template-3 .offshore-sidebar .contact-item {
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-start !important;
+  flex: 0 0 18px !important;
   width: 100% !important;
   min-width: 0 !important;
   height: 18px !important;
@@ -229,11 +253,18 @@ button:hover{ transform:translateY(-2px); }
   box-sizing: border-box !important;
 }
 
+.template-3 .offshore-sidebar .contact-item:last-child {
+  margin-bottom: 0 !important;
+}
+
 .template-3 .offshore-sidebar .contact-item i {
-  display: inline-block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   flex: 0 0 12px !important;
   width: 12px !important;
-  margin-right: 5px !important;
+  min-width: 12px !important;
+  margin: 0 5px 0 0 !important;
   text-align: center !important;
 }
 
