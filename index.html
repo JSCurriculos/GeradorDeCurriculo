@@ -210,9 +210,23 @@ button:hover{ transform:translateY(-2px); }
 /* ===== CONTATOS NO MODELO 3 – quebra e cor LinkedIn ===== */
 .template-3 .contact {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-top: 10px;
+  width: 100%;
+}
+
+.template-3 .offshore-sidebar .contact > span {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.template-3 .offshore-sidebar .contact .linkedin-span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .template-3 .offshore-sidebar .contact span {
   overflow-wrap: break-word;
